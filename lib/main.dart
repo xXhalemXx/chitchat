@@ -6,5 +6,6 @@ Future<void> main() async {
   //  Here we are calling the Dependency Injection
   await DependencyInjection.init();
   //  This is the main app
+  //try fake push
   runApp(const RootApp());
 }
