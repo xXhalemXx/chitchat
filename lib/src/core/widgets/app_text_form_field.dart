@@ -1,9 +1,10 @@
 import 'package:chitchat/src/core/constants/colors.dart';
+import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AppTextFormField extends StatelessWidget {
+class AppTextFormField extends StatefulWidget {
   final EdgeInsetsGeometry? contentPadding;
   final InputBorder? focusedBorder;
   final InputBorder? enabledBorder;
@@ -31,21 +32,31 @@ class AppTextFormField extends StatelessWidget {
   });
 
   @override
+  State<AppTextFormField> createState() => _AppTextFormFieldState();
+}
+
+class _AppTextFormFieldState extends State<AppTextFormField> {
+  bool isValid = true;
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(hintText, style: AppTextStyles.poppinsFont14DarkBlue100Medium1),
+        Text(widget.hintText,
+            style: isValid
+                ? AppTextStyles.poppinsFont14DarkBlue100Medium1
+                : AppTextStyles.poppinsFont14Red100Medium1),
         TextFormField(
-          controller: controller,
+          controller: widget.controller,
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: contentPadding ??
+            contentPadding: widget.contentPadding ??
                 EdgeInsets.symmetric(horizontal: 0.w, vertical: 17.h),
-            hintStyle:
-                hintStyle ?? AppTextStyles.poppinsFont14DarkBlue100Medium1,
-            suffixIcon: suffixIcon,
-            fillColor: backgroundColor ?? AppColor.white,
+            hintStyle: widget.hintStyle ??
+                AppTextStyles.poppinsFont14DarkBlue100Medium1,
+            suffixIcon: widget.suffixIcon,
+            fillColor: widget.backgroundColor ?? AppColor.white,
             filled: true,
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: AppColor.lightGray, width: 1.0),
@@ -53,17 +64,29 @@ class AppTextFormField extends StatelessWidget {
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: AppColor.lightGray, width: 1.0),
             ),
-            errorBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 2.0),
+            errorBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: AppColor.red, width: 2.0),
             ),
-            focusedErrorBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 2.0),
+            focusedErrorBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: AppColor.red, width: 2.0),
             ),
+            errorStyle: AppTextStyles.poppinsFont12Red100light1,
           ),
-          obscureText: isObscureText ?? false,
+          obscureText: widget.isObscureText ?? false,
           style: AppTextStyles.poppinsFont16Black100Regular1,
           validator: (value) {
-            return validator(value);
+            if (widget.validator(value) == null ||
+                widget.validator(value) == "") {
+              setState(() {
+                isValid = true;
+              });
+              return null;
+            } else {
+              setState(() {
+                isValid = false;
+              });
+              return widget.validator(value);
+            }
           },
         ),
       ],

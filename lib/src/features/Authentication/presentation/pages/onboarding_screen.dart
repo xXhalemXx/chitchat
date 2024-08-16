@@ -2,8 +2,8 @@ import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/core/widgets/common_button.dart';
 import 'package:chitchat/src/features/login/presentation/widgets/onboarding_widgets/header_text.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/genral_widgets/or_with_lines.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/genral_widgets/social_media_buttons.dart';
+import 'package:chitchat/src/features/login/presentation/widgets/general_widgets/or_with_lines.dart';
+import 'package:chitchat/src/features/login/presentation/widgets/general_widgets/social_media_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -27,13 +27,12 @@ class OnboardingScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 66.0.w),
                 child: SocialMediaButtons(
-                  onPressed: () {},
                   backgroundColor: AppColor.white.withOpacity(0.19),
                 ),
               ),
               verticalSpace(30.h),
               OrWithLines(
-                textStyle: AppTextStyles.poppinsFont14White100Bold1,
+                textStyle: AppTextStyles.poppinsFont14White100Black1,
               ),
               verticalSpace(30.h),
               AppTextButton(
@@ -42,7 +41,9 @@ class OnboardingScreen extends StatelessWidget {
                   backgroundColor: AppColor.white.withOpacity(0.37),
                   buttonText: 'Sign up within mail',
                   textStyle: AppTextStyles.poppinsFont16White100Medium1,
-                  onPressed: () {}),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/sign_up");
+                  }),
               verticalSpace(46.h),
               const LoginText()
             ],
