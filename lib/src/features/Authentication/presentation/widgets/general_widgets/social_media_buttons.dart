@@ -1,5 +1,4 @@
 import 'package:chitchat/src/core/config/config.dart';
-import 'package:chitchat/src/core/constants/colors.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
@@ -72,8 +71,9 @@ class SocialMediaButtons extends StatelessWidget {
         ),
         backgroundColor:
             type == 'facebook' ? AppColor.darkBlue : AppColor.white,
-        duration: Duration(seconds: 1),
+        duration: const Duration(seconds: 1),
       ),
     );
+    // facebook: 0.0
   }
 }
