@@ -43,6 +43,13 @@ class AppTextStyles {
     color: AppColor.white,
     height: 1.sp,
   );
+  static TextStyle poppinsFont14White100Black1 = TextStyle(
+    fontSize: 14.sp,
+    fontFamily: 'Poppins',
+    fontWeight: FontWeightHelper.black,
+    color: AppColor.white,
+    height: 1.sp,
+  );
   static TextStyle poppinsFont14Gray100Black1 = TextStyle(
     fontSize: 14.sp,
     fontFamily: 'Poppins',
@@ -92,6 +99,13 @@ class AppTextStyles {
     color: AppColor.darkerBlue,
     height: 1.sp,
   );
+  static TextStyle poppinsFont14Red100Medium1 = TextStyle(
+    fontSize: 14.sp,
+    fontFamily: 'Poppins',
+    fontWeight: FontWeightHelper.medium,
+    color: AppColor.red,
+    height: 1.sp,
+  );
   static TextStyle poppinsFont14Gray100light1_4 = TextStyle(
     fontSize: 14.sp,
     fontFamily: 'Poppins',
@@ -99,5 +113,12 @@ class AppTextStyles {
     color: AppColor.gray,
     height: 1.4.sp,
     letterSpacing: 0.1.sp,
+  );
+  static TextStyle poppinsFont12Red100light1 = TextStyle(
+    fontSize: 12.sp,
+    fontFamily: 'Poppins',
+    fontWeight: FontWeightHelper.light,
+    color: AppColor.red,
+    height: 1.sp,
   );
 }

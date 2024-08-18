@@ -1,8 +1,8 @@
 import 'package:chitchat/src/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 
-class LoginAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const LoginAppBar({super.key});
+class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const GeneralAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

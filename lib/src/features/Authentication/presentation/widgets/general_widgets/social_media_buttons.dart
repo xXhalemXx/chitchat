@@ -4,10 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SocialMediaButtons extends StatelessWidget {
-  const SocialMediaButtons(
-      {super.key, required this.onPressed, required this.backgroundColor});
+  const SocialMediaButtons({super.key, required this.backgroundColor});
   final Color backgroundColor;
-  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
