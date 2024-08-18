@@ -1,5 +1,6 @@
+import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
-import 'package:chitchat/src/core/helpers/validators.dart';
+import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
 import 'package:chitchat/src/core/widgets/app_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +25,7 @@ class EmailAndPassword extends StatelessWidget {
             AppTextFormField(
               hintText: 'Your email',
               validator: (value) {
-                return Validators.emailValidator(value);
+                return getIt<AuthCubit>().emailValidator(value);
               },
               controller: emailController,
             ),
@@ -32,7 +33,7 @@ class EmailAndPassword extends StatelessWidget {
             AppTextFormField(
               hintText: 'password',
               validator: (value) {
-                return Validators.passwordValidator(value);
+                return getIt<AuthCubit>().passwordValidator(value);
               },
               isObscureText: true,
               controller: passwordController,

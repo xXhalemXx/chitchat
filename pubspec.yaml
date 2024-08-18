@@ -35,12 +35,12 @@ dependencies:
   bloc: ^8.1.4
   flutter_native_splash: ^2.4.1
   flutter_svg: ^2.0.10+1
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  google_sign_in: ^6.2.1
+  firebase_auth: ^5.1.4
+  firebase_core: ^3.3.0
   cupertino_icons: ^1.0.6
-  firebase_core: ^2.24.2
-
+  get_it: ^7.7.0
+  flutter_facebook_auth: ^7.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

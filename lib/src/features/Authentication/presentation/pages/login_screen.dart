@@ -2,12 +2,12 @@ import 'package:chitchat/src/core/constants/colors.dart';
 import 'package:chitchat/src/core/constants/text_style.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/core/widgets/common_button.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/general_widgets/or_with_lines.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/login_widgets/email_and_password.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/login_widgets/forgot_password.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/general_widgets/general_app_bar.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/login_widgets/login_header.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/general_widgets/social_media_buttons.dart';
+import 'package:chitchat/src/features/Authentication/presentation/widgets/general_widgets/or_with_lines.dart';
+import 'package:chitchat/src/features/Authentication/presentation/widgets/login_widgets/email_and_password.dart';
+import 'package:chitchat/src/features/Authentication/presentation/widgets/login_widgets/forgot_password.dart';
+import 'package:chitchat/src/features/Authentication/presentation/widgets/general_widgets/general_app_bar.dart';
+import 'package:chitchat/src/features/Authentication/presentation/widgets/login_widgets/login_header.dart';
+import 'package:chitchat/src/features/Authentication/presentation/widgets/general_widgets/social_media_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

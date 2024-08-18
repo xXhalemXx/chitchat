@@ -1,8 +1,8 @@
 library route_pages;
 
-import 'package:chitchat/src/features/login/presentation/pages/login_screen.dart';
-import 'package:chitchat/src/features/login/presentation/pages/onboarding_screen.dart';
-import 'package:chitchat/src/features/login/presentation/pages/sign_up_screen.dart';
+import 'package:chitchat/src/features/Authentication/presentation/pages/login_screen.dart';
+import 'package:chitchat/src/features/Authentication/presentation/pages/onboarding_screen.dart';
+import 'package:chitchat/src/features/Authentication/presentation/pages/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import '/src/core/error/error.dart';
 import 'routes.dart';

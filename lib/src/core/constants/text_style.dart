@@ -43,6 +43,14 @@ class AppTextStyles {
     color: AppColor.white,
     height: 1.sp,
   );
+  static TextStyle poppinsFont14DarkBlue100Bold1 = TextStyle(
+    fontSize: 14.sp,
+    fontFamily: 'Poppins',
+    fontWeight: FontWeightHelper.bold,
+    color: AppColor.darkBlue,
+    height: 1.sp,
+  );
+
   static TextStyle poppinsFont14White100Black1 = TextStyle(
     fontSize: 14.sp,
     fontFamily: 'Poppins',
