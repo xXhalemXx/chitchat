@@ -2,9 +2,9 @@ import 'package:chitchat/src/core/constants/colors.dart';
 import 'package:chitchat/src/core/constants/text_style.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/core/widgets/common_button.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/general_widgets/general_app_bar.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/sign_up_widgets/name_email_and_password.dart';
-import 'package:chitchat/src/features/login/presentation/widgets/sign_up_widgets/sign_up_header_text.dart';
+import 'package:chitchat/src/features/Authentication/presentation/widgets/general_widgets/general_app_bar.dart';
+import 'package:chitchat/src/features/Authentication/presentation/widgets/sign_up_widgets/name_email_and_password.dart';
+import 'package:chitchat/src/features/Authentication/presentation/widgets/sign_up_widgets/sign_up_header_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

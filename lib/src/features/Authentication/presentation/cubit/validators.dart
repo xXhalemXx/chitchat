@@ -1,5 +1,5 @@
 class Validators {
-  static String? nameValidator(String? value) {
+  String? nameValidator(String? value) {
     final validCharacters = RegExp(r'[a-zA-Z0-9._]');
     if (value == null || value.isEmpty || value == '') {
       return 'You need to fill this field';
@@ -9,7 +9,7 @@ class Validators {
     return null;
   }
 
-  static String? emailValidator(String? value) {
+  String? emailValidator(String? value) {
     final validCharacters = RegExp(
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
     if (value == null || value.isEmpty || value == '') {
@@ -20,7 +20,7 @@ class Validators {
     return null;
   }
 
-  static String? passwordValidator(String? value) {
+  String? passwordValidator(String? value) {
     if (value == null || value.isEmpty || value == '') {
       return 'You need to fill this field';
     } else if (value.length < 6) {
