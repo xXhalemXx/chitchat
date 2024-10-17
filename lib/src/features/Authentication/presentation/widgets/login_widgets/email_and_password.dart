@@ -6,20 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmailAndPassword extends StatelessWidget {
-  const EmailAndPassword(
-      {super.key,
-      required this.emailController,
-      required this.passwordController,
-      required this.formKey});
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-  final GlobalKey<FormState> formKey;
+  const EmailAndPassword({
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 20.0.w, right: 20.0.w),
       child: Form(
-        key: formKey,
+        key: getIt<AuthCubit>().loginFormKey,
         child: Column(
           children: [
             AppTextFormField(
@@ -27,7 +22,7 @@ class EmailAndPassword extends StatelessWidget {
               validator: (value) {
                 return getIt<AuthCubit>().emailValidator(value);
               },
-              controller: emailController,
+              controller: getIt<AuthCubit>().loginEmailController,
             ),
             verticalSpace(30.h),
             AppTextFormField(
@@ -36,7 +31,7 @@ class EmailAndPassword extends StatelessWidget {
                 return getIt<AuthCubit>().passwordValidator(value);
               },
               isObscureText: true,
-              controller: passwordController,
+              controller: getIt<AuthCubit>().loginPasswordController,
             ),
           ],
         ),

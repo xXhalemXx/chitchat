@@ -57,3 +57,38 @@ class AppTextButton extends StatelessWidget {
     );
   }
 }
+
+class LoadingButton extends StatelessWidget {
+  const LoadingButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+      ),
+      onPressed: () {},
+      child: Container(
+          width: double.maxFinite,
+          height: 48.h,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColor.black, AppColor.darkBlue],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16.0.r),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+          child: Center(
+            child: SizedBox(
+              width: 25.w,
+              child: CircularProgressIndicator(
+                color: AppColor.white,
+              ),
+            ),
+          )),
+    );
+    ;
+  }
+}

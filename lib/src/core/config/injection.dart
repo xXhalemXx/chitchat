@@ -8,6 +8,7 @@ final getIt = GetIt.instance;
 void setupGetIT() {
   getIt.registerSingleton<Validators>(Validators());
   getIt.registerSingleton<AuthenticationLogic>(AuthenticationLogic());
-  getIt.registerSingleton<AuthCubit>(
-      AuthCubit(validators: getIt(), authenticationLogic: getIt()));
+  getIt.registerLazySingleton<AuthCubit>(() => AuthCubit(
+      authenticationLogic: getIt<AuthenticationLogic>(),
+      validators: getIt<Validators>()));
 }

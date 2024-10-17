@@ -1,4 +1,6 @@
+import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/colors.dart';
+import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 
 class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -12,6 +14,7 @@ class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
           if (Navigator.canPop(context)) {
+            getIt.resetLazySingleton<AuthCubit>();
             Navigator.pop(context);
           }
         },

@@ -4,6 +4,7 @@ import 'package:chitchat/src/core/widgets/common_button.dart';
 import 'package:chitchat/src/features/Authentication/presentation/widgets/onboarding_widgets/header_text.dart';
 import 'package:chitchat/src/features/Authentication/presentation/widgets/general_widgets/or_with_lines.dart';
 import 'package:chitchat/src/features/Authentication/presentation/widgets/general_widgets/social_media_buttons.dart';
+import 'package:chitchat/src/features/Authentication/presentation/widgets/onboarding_widgets/sign_up_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,7 +17,7 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: boxDecorationFun(),
+        decoration: _boxDecorationFun(),
         child: Padding(
           padding: EdgeInsets.only(left: 26.0.w, top: 70.h),
           child: Column(
@@ -24,26 +25,16 @@ class OnboardingScreen extends StatelessWidget {
             children: [
               const HeaderText(),
               verticalSpace(38.h),
-              Padding(
-                padding: EdgeInsets.only(left: 66.0.w),
-                child: SocialMediaButtons(
-                  backgroundColor: AppColor.white.withOpacity(0.19),
-                ),
+              SocialMediaButtons(
+                backgroundColor: AppColor.white.withOpacity(0.19),
+                leftPadding: 66,
               ),
               verticalSpace(30.h),
               OrWithLines(
                 textStyle: AppTextStyles.poppinsFont14White100Black1,
               ),
               verticalSpace(30.h),
-              AppTextButton(
-                  buttonWidth: 320.w,
-                  buttonHeight: 48.h,
-                  backgroundColor: AppColor.white.withOpacity(0.37),
-                  buttonText: 'Sign up within mail',
-                  textStyle: AppTextStyles.poppinsFont16White100Medium1,
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/sign_up");
-                  }),
+              const SignUpButton(),
               verticalSpace(46.h),
               const LoginText()
             ],
@@ -53,7 +44,7 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 
-  BoxDecoration boxDecorationFun() {
+  BoxDecoration _boxDecorationFun() {
     return const BoxDecoration(
       image: DecorationImage(
           image: AssetImage("assets/images/background.jpg"), fit: BoxFit.cover),
