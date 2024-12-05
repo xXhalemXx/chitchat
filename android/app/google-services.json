@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "931632832155",
     "project_id": "chitchat-17a50",
-    "storage_bucket": "chitchat-17a50.appspot.com"
+    "storage_bucket": "chitchat-17a50.firebasestorage.app"
   },
   "client": [
     {
@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "931632832155-a0j19j1a0954k5pilb9ua3u45v0ji6dg.apps.googleusercontent.com",
+          "client_id": "931632832155-3c4tqirh7djemthiuvbneo9ts79engfi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.chitchat",
-            "certificate_hash": "acf925efb6a05bd240dee101a52929c808b841b6"
+            "certificate_hash": "3e4dbd05173984f0f16c6ccb3dc598266294adfb"
           }
         },
         {

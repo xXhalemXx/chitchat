@@ -12,4 +12,6 @@ class AppColor {
   static Color lighterGray = const Color(0XffE6E6E6);
   static Color green = const Color(0Xff0FE16D);
   static Color lightGray = const Color(0XffCDD1D0);
+  static Color moreLightGray = const Color(0XffF5F6F6);
+  static Color lightBlue = const Color(0XffDEEBFF);
 }

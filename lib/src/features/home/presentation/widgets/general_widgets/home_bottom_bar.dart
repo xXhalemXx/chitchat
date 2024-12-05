@@ -4,15 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class HomeBottomBar extends StatefulWidget {
-  const HomeBottomBar({super.key});
+class HomeBottomBar extends StatelessWidget {
+  const HomeBottomBar(
+      {super.key, required this.onTabTapped, required this.currentIndex});
+  final int currentIndex;
+  final Function(int) onTabTapped;
 
   @override
-  State<HomeBottomBar> createState() => _HomeBottomBarState();
-}
-
-class _HomeBottomBarState extends State<HomeBottomBar> {
-  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -76,12 +74,10 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
           ),
         ),
       ],
-      currentIndex: _currentIndex,
+      currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,
       onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
+        onTabTapped(index);
       },
     );
   }

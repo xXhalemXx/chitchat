@@ -1,11 +1,12 @@
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
-import 'package:chitchat/src/features/home/presentation/widgets/meassages/chat_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ChatsView extends StatelessWidget {
-  const ChatsView({super.key});
+class GeneralHomeBody extends StatelessWidget {
+  const GeneralHomeBody({super.key, this.header, required this.body});
+  final String? header;
+  final Widget body;
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +19,9 @@ class ChatsView extends StatelessWidget {
             verticalSpace(14.h),
             _grayBar(),
             verticalSpace(14.h),
+            _optionalHeader(),
             Expanded(
-              child: ListView.builder(
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  return ChatHeader();
-                },
-              ),
+              child: body,
             ),
           ],
         ),
@@ -47,6 +44,26 @@ class ChatsView extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100.r),
         color: AppColor.lighterGray,
+      ),
+    );
+  }
+
+  Widget _optionalHeader() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: EdgeInsets.only(left: 24.0.w),
+        child: Column(
+          children: [
+            header == null
+                ? const SizedBox.shrink()
+                : Text(
+                    header!,
+                    style: AppTextStyles.poppinsFont16Black100Medium1,
+                  ),
+            header == null ? const SizedBox.shrink() : verticalSpace(10.h),
+          ],
+        ),
       ),
     );
   }

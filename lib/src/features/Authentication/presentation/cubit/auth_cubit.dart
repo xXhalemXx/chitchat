@@ -69,6 +69,7 @@ class AuthCubit extends Cubit<AuthState> {
     await authenticationLogic.registerWithEmailAndPassword(
       email: signUpEmailController.text,
       password: signUpPasswordController.text,
+      name: signUpNameController.text,
       context: context,
     );
 

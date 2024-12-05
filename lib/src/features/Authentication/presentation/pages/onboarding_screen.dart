@@ -35,7 +35,7 @@ class OnboardingScreen extends StatelessWidget {
               ),
               verticalSpace(30.h),
               const SignUpButton(),
-              verticalSpace(46.h),
+              verticalSpace(25.h),
               const LoginText()
             ],
           ),

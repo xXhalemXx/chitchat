@@ -10,6 +10,15 @@ class ChatHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: 20,
+      itemBuilder: (context, index) {
+        return _chatEntity();
+      },
+    );
+  }
+
+  _chatEntity() {
     return Padding(
       padding: EdgeInsets.only(left: 24.0.w, bottom: 30.h, right: 24.w),
       child: SizedBox(
@@ -22,7 +31,7 @@ class ChatHeader extends StatelessWidget {
               _avatarImage(),
               horizontalSpace(12.w),
               _avatarNameAndLastMessage(),
-              const Expanded(child: SizedBox.shrink()),
+              const Spacer(),
               _timeAndUnreadMessage(),
             ],
           ),

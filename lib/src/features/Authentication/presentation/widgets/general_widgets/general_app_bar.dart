@@ -3,6 +3,7 @@ import 'package:chitchat/src/core/constants/colors.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 
+//general
 class GeneralAppBar extends StatelessWidget implements PreferredSizeWidget {
   const GeneralAppBar({super.key});
 

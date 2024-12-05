@@ -49,7 +49,7 @@ class StatusCircles extends StatelessWidget {
               ),
             ),
           ),
-          verticalSpace(10.h),
+          verticalSpace(6.h),
           Expanded(
             child: Text(
               'Samy',
