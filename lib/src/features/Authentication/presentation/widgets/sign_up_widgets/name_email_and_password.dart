@@ -6,41 +6,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NameEmailAndPassword extends StatelessWidget {
-  const NameEmailAndPassword(
-      {super.key,
-      required this.nameController,
-      required this.emailController,
-      required this.passwordController,
-      required this.confirmPasswordController,
-      required this.formKey});
-  final TextEditingController nameController;
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-  final TextEditingController confirmPasswordController;
-  final GlobalKey<FormState> formKey;
+  const NameEmailAndPassword({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
+      key: getIt<AuthCubit>().signUpFormKey,
       child: Column(
         children: [
           AppTextFormField(
-              controller: nameController,
+              controller: getIt<AuthCubit>().signUpNameController,
               hintText: 'Your name',
               validator: (value) {
                 return getIt<AuthCubit>().nameValidator(value);
               }),
           verticalSpace(30.h),
           AppTextFormField(
-              controller: emailController,
+              controller: getIt<AuthCubit>().signUpEmailController,
               hintText: 'Your email',
               validator: (value) {
                 return getIt<AuthCubit>().emailValidator(value);
               }),
           verticalSpace(30.h),
           AppTextFormField(
-            controller: passwordController,
+            controller: getIt<AuthCubit>().signUpPasswordController,
             hintText: 'password',
             validator: (value) {
               return getIt<AuthCubit>().passwordValidator(value);
@@ -49,18 +40,11 @@ class NameEmailAndPassword extends StatelessWidget {
           ),
           verticalSpace(30.h),
           AppTextFormField(
-            controller: confirmPasswordController,
+            controller: getIt<AuthCubit>().signUpConfirmPasswordController,
             hintText: 'confirm password',
             validator: (value) {
-              if (value == null || value.isEmpty || value == '') {
-                return 'You need to fill this field';
-              } else {
-                if (passwordController.text != confirmPasswordController.text) {
-                  return 'passwords do not match';
-                } else {
-                  return null;
-                }
-              }
+              return getIt<AuthCubit>().conformPasswordValidator(
+                  getIt<AuthCubit>().signUpPasswordController.text, value);
             },
             isObscureText: true,
           ),

@@ -6,35 +6,40 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SocialMediaButtons extends StatelessWidget {
-  const SocialMediaButtons({super.key, required this.backgroundColor});
+  const SocialMediaButtons(
+      {super.key, required this.backgroundColor, this.leftPadding});
   final Color backgroundColor;
+  final double? leftPadding;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 48.h,
-      width: 185.w,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          socialElement(
-              svgName: 'assets/images/svgs/facebook.svg',
-              onTap: () {
-                comingSoonSnakeBar(context, 'facebook');
-              }),
-          socialElement(
-              svgName: 'assets/images/svgs/google.svg',
-              onTap: () {
-                getIt<AuthCubit>().signInWithGoogle();
-              }),
-          socialElement(
-              svgName: backgroundColor == AppColor.white
-                  ? 'assets/images/svgs/apple_black.svg'
-                  : 'assets/images/svgs/apple.svg',
-              onTap: () {
-                comingSoonSnakeBar(context, 'apple');
-              }),
-        ],
+    return Padding(
+      padding: EdgeInsets.only(left: leftPadding ?? 0.w),
+      child: SizedBox(
+        height: 48.h,
+        width: 185.w,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            socialElement(
+                svgName: 'assets/images/svgs/facebook.svg',
+                onTap: () {
+                  comingSoonSnakeBar(context, 'facebook');
+                }),
+            socialElement(
+                svgName: 'assets/images/svgs/google.svg',
+                onTap: () {
+                  getIt<AuthCubit>().signInWithGoogle(context: context);
+                }),
+            socialElement(
+                svgName: backgroundColor == AppColor.white
+                    ? 'assets/images/svgs/apple_black.svg'
+                    : 'assets/images/svgs/apple.svg',
+                onTap: () {
+                  comingSoonSnakeBar(context, 'apple');
+                }),
+          ],
+        ),
       ),
     );
   }
@@ -74,6 +79,5 @@ class SocialMediaButtons extends StatelessWidget {
         duration: const Duration(seconds: 1),
       ),
     );
-    // facebook: 0.0
   }
 }

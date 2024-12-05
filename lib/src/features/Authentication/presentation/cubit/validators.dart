@@ -28,4 +28,16 @@ class Validators {
     }
     return null;
   }
+
+  String? conformPasswordValidator(String? firstPass, String? secondPass) {
+    if (secondPass == null || secondPass.isEmpty || secondPass == '') {
+      return 'You need to fill this field';
+    } else {
+      if (firstPass != secondPass) {
+        return 'passwords do not match';
+      } else {
+        return null;
+      }
+    }
+  }
 }

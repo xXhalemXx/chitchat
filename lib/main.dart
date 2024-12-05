@@ -6,13 +6,17 @@ import 'package:flutter/material.dart';
 import 'chitchat_app.dart';
 
 Future<void> main() async {
-  //  Here we are calling the Dependency Injection
-  setupGetIT();
-
+  // Ensure Flutter application is initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+    name: 'Chitchat',
   );
+
+  // Call dependency injection setup
+  setupGetIT();
   //  This is the main app
   runApp(const RootApp());
 }

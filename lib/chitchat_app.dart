@@ -1,6 +1,8 @@
+import 'package:chitchat/src/core/routes/names.dart';
+import 'package:chitchat/src/core/routes/router.dart';
+
 import 'src/core/config/config.dart';
 import 'package:flutter/material.dart';
-import 'src/core/routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RootApp extends StatelessWidget {

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OrWithLines extends StatelessWidget {
-  OrWithLines({super.key, required this.textStyle});
-  TextStyle textStyle;
+  const OrWithLines({super.key, required this.textStyle});
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {

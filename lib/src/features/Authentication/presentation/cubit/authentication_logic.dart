@@ -1,9 +1,17 @@
+import 'package:chitchat/src/core/cached_data/cached_data.dart';
+import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/global/current_user_data.dart';
+import 'package:chitchat/src/core/models/user_model.dart';
+import 'package:chitchat/src/core/widgets/error_dialog.dart';
+import 'package:chitchat/src/core/widgets/success_dialog.dart';
+import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationLogic {
-  Future<UserCredential> signInWithGoogle() async {
+  signInWithGoogle({required BuildContext context}) async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -11,25 +19,132 @@ class AuthenticationLogic {
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
 
-    // Create a new credential
+    //Create a new credential
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
+    // Sign in with the credential
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    //convert firebase user to User model
+    final UserModel user =
+        _covertFirebaseUserToUserModel(FirebaseAuth.instance.currentUser);
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    // save user in Firestore
+    await _saveUserInFireStore(
+      user: user,
+    );
+
+    if (context.mounted) {
+      Navigator.pushNamed(context, '/home');
+    }
+
+    // save user details in cache
+    getIt<CacheData>().setString(key: 'UID', value: user.uId);
+    // save user details in global class
+    getIt<CurrentUserData>().set(
+      currentUser: user,
+    );
+    // return userCredential;
   }
 
-  Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
+  UserModel _covertFirebaseUserToUserModel(User? user) {
+    return UserModel(
+      email: user?.email ?? '',
+      phone: user?.phoneNumber ?? '',
+      name: user?.displayName ?? '',
+      uId: user?.uid ?? '',
+      photo: '',
+    );
+  }
 
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
+  loginWithEmailAndPassword(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
+    try {
+      if (getIt<AuthCubit>().loginFormKey.currentState!.validate()) {
+        UserCredential credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
 
-    // Once signed in, return the UserCredential
-    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+        if (context.mounted) {
+          Navigator.pushNamed(context, '/home');
+        }
+        // save user details in cache
+        getIt<CacheData>()
+            .setString(key: 'UID', value: credential.user?.uid ?? '');
+        // save user details in global class
+        getIt<CurrentUserData>().set(
+            currentUser: UserModel(
+                email: credential.user?.email ?? '',
+                phone: credential.user?.phoneNumber ?? '',
+                name: credential.user?.displayName ?? '',
+                uId: credential.user?.uid ?? '',
+                photo: credential.user?.photoURL ?? ''));
+      }
+    } catch (error) {
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (_) => ErrorDialog(
+            errorMessage: error.toString(),
+          ),
+        );
+      }
+    }
+  }
+
+  registerWithEmailAndPassword(
+      {required String email,
+      required String password,
+      required String name,
+      required BuildContext context}) async {
+    try {
+      if (getIt<AuthCubit>().signUpFormKey.currentState!.validate()) {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        // save user in Firestore
+        await _saveUserInFireStore(
+          user: UserModel(
+            email: email,
+            phone: '',
+            name: name,
+            uId: userCredential.user!.uid,
+            photo: '',
+          ),
+        );
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            builder: (_) => const SuccessDialog(
+                message: 'Your account created successfully'),
+          );
+        }
+      }
+    } catch (error) {
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (_) => ErrorDialog(
+            errorMessage: error.toString(),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _saveUserInFireStore({
+    required var user,
+  }) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uId)
+        .get();
+    if (!documentSnapshot.exists) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uId)
+          .set(user.toMap());
+    }
   }
 }
