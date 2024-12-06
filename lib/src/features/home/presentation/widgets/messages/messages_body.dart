@@ -6,6 +6,7 @@ import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/
 import 'package:chitchat/src/features/home/presentation/widgets/messages/chat_header.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/messages/status_circles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MessagesBody extends StatelessWidget {
@@ -13,23 +14,29 @@ class MessagesBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        verticalSpace(60.h),
-        GeneralHomeBar(
-          title: 'Home',
-          onTap: () {
-            getIt<HomeCubit>().getAllUsers();
-          },
-          rightWidget: _circleAvatar(),
-        ),
-        verticalSpace(30.h),
-        const StatusCircles(),
-        verticalSpace(30.h),
-        const GeneralHomeBody(
-          body: ChatHeader(),
-        ),
-      ],
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            verticalSpace(60.h),
+            GeneralHomeBar(
+              title: 'Home',
+              onTap: () {
+                getIt<HomeCubit>().loadData();
+              },
+              rightWidget: _circleAvatar(),
+            ),
+            verticalSpace(30.h),
+            const StatusCircles(),
+            verticalSpace(30.h),
+            GeneralHomeBody(
+              body: (state is HomeLoading)
+                  ? Center(child: const CircularProgressIndicator())
+                  : const ChatHeader(),
+            ),
+          ],
+        );
+      },
     );
   }
 

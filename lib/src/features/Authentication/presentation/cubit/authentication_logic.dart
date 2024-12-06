@@ -1,10 +1,10 @@
 import 'package:chitchat/src/core/cached_data/cached_data.dart';
 import 'package:chitchat/src/core/config/config.dart';
-import 'package:chitchat/src/core/global/current_user_data.dart';
 import 'package:chitchat/src/core/models/user_model.dart';
 import 'package:chitchat/src/core/widgets/error_dialog.dart';
 import 'package:chitchat/src/core/widgets/success_dialog.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,17 +34,17 @@ class AuthenticationLogic {
     await _saveUserInFireStore(
       user: user,
     );
+    //load data to home
+    await getIt<HomeCubit>().loadData();
 
     if (context.mounted) {
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/home');
     }
 
     // save user details in cache
     getIt<CacheData>().setString(key: 'UID', value: user.uId);
     // save user details in global class
-    getIt<CurrentUserData>().set(
-      currentUser: user,
-    );
+    getIt<HomeCubit>().currentUser = user;
     // return userCredential;
   }
 
@@ -67,20 +67,22 @@ class AuthenticationLogic {
         UserCredential credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
 
+        //load data to home
+        await getIt<HomeCubit>().loadData();
+
         if (context.mounted) {
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushReplacementNamed(context, '/home');
         }
         // save user details in cache
         getIt<CacheData>()
             .setString(key: 'UID', value: credential.user?.uid ?? '');
         // save user details in global class
-        getIt<CurrentUserData>().set(
-            currentUser: UserModel(
-                email: credential.user?.email ?? '',
-                phone: credential.user?.phoneNumber ?? '',
-                name: credential.user?.displayName ?? '',
-                uId: credential.user?.uid ?? '',
-                photo: credential.user?.photoURL ?? ''));
+        getIt<HomeCubit>().currentUser = UserModel(
+            email: credential.user?.email ?? '',
+            phone: credential.user?.phoneNumber ?? '',
+            name: credential.user?.displayName ?? '',
+            uId: credential.user?.uid ?? '',
+            photo: credential.user?.photoURL ?? '');
       }
     } catch (error) {
       if (context.mounted) {

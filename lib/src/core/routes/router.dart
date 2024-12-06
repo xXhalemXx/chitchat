@@ -6,6 +6,7 @@ import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cub
 import 'package:chitchat/src/features/Authentication/presentation/pages/login_screen.dart';
 import 'package:chitchat/src/features/Authentication/presentation/pages/onboarding_screen.dart';
 import 'package:chitchat/src/features/Authentication/presentation/pages/sign_up_screen.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:chitchat/src/features/home/presentation/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,7 +41,10 @@ class AppRoute {
         );
       case RoutesName.home:
         return MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<HomeCubit>(),
+            child: const HomeScreen(),
+          ),
         );
 
       default:

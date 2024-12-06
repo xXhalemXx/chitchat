@@ -13,42 +13,22 @@ class StatusCircles extends StatelessWidget {
       child: SizedBox(
         height: 82.h,
         width: double.infinity,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 20,
-          itemBuilder: (context, index) {
-            return _circle();
-          },
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: _circleWithName(),
         ),
       ),
     );
   }
 
-  Widget _circle() {
+  Widget _circleWithName() {
     return Container(
       margin: EdgeInsets.only(right: 12.0.w),
       width: 58.w,
       height: 82.h,
       child: Column(
         children: [
-          Container(
-            width: 58.w,
-            height: 58.h,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                    color: AppColor.white.withOpacity(0.6), width: 1.0.w)),
-            child: Center(
-              child: Container(
-                width: 52.w,
-                height: 52.h,
-                decoration: const BoxDecoration(shape: BoxShape.circle),
-                child: CircleAvatar(
-                  child: Image.asset('assets/images/person_1.png'),
-                ),
-              ),
-            ),
-          ),
+          _userImageWithAdd(),
           verticalSpace(6.h),
           Expanded(
             child: Text(
@@ -59,6 +39,51 @@ class StatusCircles extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Widget _userImageWithAdd() {
+    return Stack(
+      children: [
+        Container(
+          width: 60.w,
+          height: 60.h,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                  color: AppColor.white.withOpacity(0.6), width: 1.50.w)),
+          child: Center(
+            child: Container(
+              width: 52.w,
+              height: 52.h,
+              decoration: const BoxDecoration(shape: BoxShape.circle),
+              child: CircleAvatar(
+                child: Image.asset('assets/images/person_1.png'),
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 2.h,
+          right: 0.w,
+          child: Container(
+            width: 16.w,
+            height: 16.h,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColor.white,
+              border: Border.all(color: AppColor.black, width: 1.2.w),
+            ),
+            child: Center(
+              child: Icon(
+                Icons.add,
+                size: 10.w,
+                color: AppColor.black,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
