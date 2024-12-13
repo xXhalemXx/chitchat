@@ -1,5 +1,4 @@
 import 'package:chitchat/src/core/helpers/spacing.dart';
-import 'package:chitchat/src/features/home/presentation/widgets/calls/call_details.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/contacts/add_contact.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/contacts/contacts_details.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/general_home_bar.dart';

@@ -1,12 +1,14 @@
 library route_pages;
 
 import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/models/user_model.dart';
 import 'package:chitchat/src/core/routes/names.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
 import 'package:chitchat/src/features/Authentication/presentation/pages/login_screen.dart';
 import 'package:chitchat/src/features/Authentication/presentation/pages/onboarding_screen.dart';
 import 'package:chitchat/src/features/Authentication/presentation/pages/sign_up_screen.dart';
 import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/pages/chat_page.dart';
 import 'package:chitchat/src/features/home/presentation/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +46,16 @@ class AppRoute {
           builder: (_) => BlocProvider(
             create: (_) => getIt<HomeCubit>(),
             child: const HomeScreen(),
+          ),
+        );
+      case RoutesName.chat:
+        final UserModel receiver = settings!.arguments as UserModel;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<HomeCubit>(),
+            child: ChatPage(
+              receiver: receiver,
+            ),
           ),
         );
 

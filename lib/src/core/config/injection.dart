@@ -19,6 +19,6 @@ void setupGetIT() {
       validators: getIt<Validators>()));
   //injection for home
   getIt.registerLazySingleton<MassagesLogic>(() => MassagesLogic());
-  getIt.registerLazySingleton<HomeCubit>(
-      () => HomeCubit(massagesLogic: getIt<MassagesLogic>()));
+  getIt.registerSingleton<HomeCubit>(
+      HomeCubit(massagesLogic: getIt<MassagesLogic>()));
 }

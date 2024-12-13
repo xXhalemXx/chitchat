@@ -1,3 +1,4 @@
+import 'package:chitchat/src/core/app_style/app_theme.dart';
 import 'package:chitchat/src/core/routes/names.dart';
 import 'package:chitchat/src/core/routes/router.dart';
 
@@ -14,8 +15,9 @@ class RootApp extends StatelessWidget {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_, ch) => const DismissKeyboard(
+      builder: (_, ch) => DismissKeyboard(
         child: MaterialApp(
+          theme: lightTheme,
           debugShowCheckedModeBanner: false,
           initialRoute: RoutesName.initial,
           onGenerateRoute: AppRoute.generate,

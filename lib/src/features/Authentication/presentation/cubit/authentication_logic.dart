@@ -34,9 +34,6 @@ class AuthenticationLogic {
     await _saveUserInFireStore(
       user: user,
     );
-    //load data to home
-    await getIt<HomeCubit>().loadData();
-
     if (context.mounted) {
       Navigator.pushReplacementNamed(context, '/home');
     }
@@ -55,6 +52,7 @@ class AuthenticationLogic {
       name: user?.displayName ?? '',
       uId: user?.uid ?? '',
       photo: '',
+      bio: '',
     );
   }
 
@@ -66,10 +64,6 @@ class AuthenticationLogic {
       if (getIt<AuthCubit>().loginFormKey.currentState!.validate()) {
         UserCredential credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
-
-        //load data to home
-        await getIt<HomeCubit>().loadData();
-
         if (context.mounted) {
           Navigator.pushReplacementNamed(context, '/home');
         }
@@ -78,11 +72,13 @@ class AuthenticationLogic {
             .setString(key: 'UID', value: credential.user?.uid ?? '');
         // save user details in global class
         getIt<HomeCubit>().currentUser = UserModel(
-            email: credential.user?.email ?? '',
-            phone: credential.user?.phoneNumber ?? '',
-            name: credential.user?.displayName ?? '',
-            uId: credential.user?.uid ?? '',
-            photo: credential.user?.photoURL ?? '');
+          email: credential.user?.email ?? '',
+          phone: credential.user?.phoneNumber ?? '',
+          name: credential.user?.displayName ?? '',
+          uId: credential.user?.uid ?? '',
+          photo: credential.user?.photoURL ?? '',
+          bio: '',
+        );
       }
     } catch (error) {
       if (context.mounted) {
@@ -113,6 +109,7 @@ class AuthenticationLogic {
             name: name,
             uId: userCredential.user!.uid,
             photo: '',
+            bio: '',
           ),
         );
         if (context.mounted) {

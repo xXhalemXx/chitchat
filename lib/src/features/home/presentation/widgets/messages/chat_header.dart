@@ -1,24 +1,49 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
+import 'package:chitchat/src/core/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ChatHeader extends StatelessWidget {
-  const ChatHeader({super.key});
+  const ChatHeader({super.key, required this.users});
+  final List<UserModel> users;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 20,
-      itemBuilder: (context, index) {
-        return _chatEntity();
-      },
+    return users.isEmpty
+        ? _noChatsYet()
+        : ListView.builder(
+            itemCount: users.length,
+            itemBuilder: (context, index) {
+              return _chatEntity(user: users[index]);
+            },
+          );
+  }
+
+  _noChatsYet() {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'No Chats yet',
+            style: AppTextStyles.poppinsFont20Black100Bold1,
+          ),
+          SizedBox(height: 16.h),
+          Text(
+            'Start chatting with your friends',
+            style: AppTextStyles.poppinsFont16Black100Regular1,
+          ),
+        ],
+      ),
     );
   }
 
-  _chatEntity() {
+  _chatEntity({required UserModel user}) {
     return Padding(
       padding: EdgeInsets.only(left: 24.0.w, bottom: 30.h, right: 24.w),
       child: SizedBox(
@@ -28,9 +53,9 @@ class ChatHeader extends StatelessWidget {
           endActionPane: _endActionPane(),
           child: Row(
             children: [
-              _avatarImage(),
+              _avatarImage(userPhoto: user.photo),
               horizontalSpace(12.w),
-              _avatarNameAndLastMessage(),
+              _avatarNameAndLastMessage(name: user.name),
               const Spacer(),
               _timeAndUnreadMessage(),
             ],
@@ -40,7 +65,7 @@ class ChatHeader extends StatelessWidget {
     );
   }
 
-  Widget _avatarImage() {
+  Widget _avatarImage({required String userPhoto}) {
     return Stack(
       children: [
         Container(
@@ -48,7 +73,9 @@ class ChatHeader extends StatelessWidget {
           height: 52.h,
           decoration: const BoxDecoration(shape: BoxShape.circle),
           child: CircleAvatar(
-            child: Image.asset('assets/images/person_2.png'),
+            backgroundImage: userPhoto == ''
+                ? const AssetImage('assets/images/noProfilePic.png')
+                : CachedNetworkImageProvider(userPhoto) as ImageProvider,
           ),
         ),
         Positioned(
@@ -67,13 +94,13 @@ class ChatHeader extends StatelessWidget {
     );
   }
 
-  Widget _avatarNameAndLastMessage() {
+  Widget _avatarNameAndLastMessage({required String name}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Alex Linderson',
+          name,
           style: AppTextStyles.poppinsFont20Black100Medium1,
         ),
         verticalSpace(6.h),

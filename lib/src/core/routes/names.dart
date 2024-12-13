@@ -8,4 +8,5 @@ class RoutesName {
   static const onboarding = '/onboarding';
   static const register = '/register';
   static const profile = '/profile';
+  static const chat = '/chat';
 }

@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -32,7 +35,7 @@ class StatusCircles extends StatelessWidget {
           verticalSpace(6.h),
           Expanded(
             child: Text(
-              'Samy',
+              getIt<HomeCubit>().currentUser.name,
               style: AppTextStyles.poppinsFont14White100Regular1,
               textAlign: TextAlign.center,
             ),
@@ -43,6 +46,8 @@ class StatusCircles extends StatelessWidget {
   }
 
   Widget _userImageWithAdd() {
+    String userPhoto = getIt<HomeCubit>().currentUser.photo;
+
     return Stack(
       children: [
         Container(
@@ -58,7 +63,9 @@ class StatusCircles extends StatelessWidget {
               height: 52.h,
               decoration: const BoxDecoration(shape: BoxShape.circle),
               child: CircleAvatar(
-                child: Image.asset('assets/images/person_1.png'),
+                backgroundImage: userPhoto == ''
+                    ? const AssetImage('assets/images/noProfilePic.png')
+                    : CachedNetworkImageProvider(userPhoto) as ImageProvider,
               ),
             ),
           ),
