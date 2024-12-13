@@ -1,5 +1,6 @@
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
+import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/contact_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -43,12 +44,10 @@ class ContactsDetails extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 20.0.h),
           child: SizedBox(
             height: 52.h,
-            child: Row(
-              children: [
-                _avatarImage(),
-                horizontalSpace(12.w),
-                _nameAndBio(name: name),
-              ],
+            child: ContactInfo(
+              bio: 'bio',
+              name: name,
+              userPhoto: '',
             ),
           ),
         ),
@@ -61,41 +60,6 @@ class ContactsDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: _list,
       ),
-    );
-  }
-
-  Widget _avatarImage() {
-    return Stack(
-      children: [
-        Container(
-          width: 52.w,
-          height: 52.h,
-          decoration: const BoxDecoration(shape: BoxShape.circle),
-          child: CircleAvatar(
-            child: Image.asset('assets/images/person3.png'),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _nameAndBio({
-    required String name,
-  }) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          name,
-          style: AppTextStyles.poppinsFont18Black100Medium1,
-        ),
-        verticalSpace(6.h),
-        Text(
-          'Life is beautiful 👌',
-          style: AppTextStyles.poppinsFont12Gray50Regular1,
-        )
-      ],
     );
   }
 
