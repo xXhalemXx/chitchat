@@ -1,7 +1,7 @@
 library route_pages;
 
 import 'package:chitchat/src/core/config/config.dart';
-import 'package:chitchat/src/core/models/user_model.dart';
+import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/core/routes/names.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
 import 'package:chitchat/src/features/Authentication/presentation/pages/login_screen.dart';
@@ -29,30 +29,30 @@ class AppRoute {
         );
       case RoutesName.signUp:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<AuthCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<AuthCubit>(),
             child: const SignUpScreen(),
           ),
         );
       case RoutesName.login:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<AuthCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<AuthCubit>(),
             child: const LoginScreen(),
           ),
         );
       case RoutesName.home:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<HomeCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<HomeCubit>()..loadData(),
             child: const HomeScreen(),
           ),
         );
       case RoutesName.chat:
         final UserModel receiver = settings!.arguments as UserModel;
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<HomeCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<HomeCubit>()..getAllMassages(receiver: receiver),
             child: ChatPage(
               receiver: receiver,
             ),

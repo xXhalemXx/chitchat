@@ -7,7 +7,7 @@ final class HomeInitial extends HomeState {}
 final class HomeLoading extends HomeState {}
 
 final class HomeLoadedMassagesPage extends HomeState {
-  final List<UserModel> usersHaveChatWith;
+  final List<UserWithLastMessage> usersHaveChatWith;
   HomeLoadedMassagesPage({required this.usersHaveChatWith});
 }
 

@@ -1,11 +1,10 @@
-import 'package:chitchat/src/features/home/presentation/widgets/calls/calls_body.dart';
-import 'package:chitchat/src/features/home/presentation/widgets/contacts/contacts_body.dart';
+import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/home_bottom_bar.dart';
-import 'package:chitchat/src/features/home/presentation/widgets/messages/messages_body.dart';
-import 'package:chitchat/src/features/home/presentation/widgets/settings/settings_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// todo use cubit to mange state rather than stateful widget
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -14,28 +13,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _MessagesScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-  final List<Widget> _homeBodes = const [
-    MessagesBody(),
-    CallsBody(),
-    ContactsBody(),
-    SettingsBody(),
-  ];
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light));
+    // todo move it to main
+    // SystemChrome.setSystemUIOverlayStyle(
+    //     const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light));
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
         decoration: _boxDecorationFun(),
-        child: _homeBodes[_currentIndex],
+        child: getIt<HomeCubit>().homeBodes[getIt<HomeCubit>().homeIndex],
       ),
       bottomNavigationBar: HomeBottomBar(
-        currentIndex: _currentIndex,
+        currentIndex: getIt<HomeCubit>().homeIndex,
         onTabTapped: (int index) {
           setState(() {
-            _currentIndex = index;
+            getIt<HomeCubit>().homeIndex = index;
           });
         },
       ),

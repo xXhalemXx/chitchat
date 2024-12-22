@@ -35,7 +35,9 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
         horizontalSpace(24),
       ],
       leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           icon: Icon(
             Icons.arrow_back,
             size: 16.w,

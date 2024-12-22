@@ -1,15 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
-import 'package:chitchat/src/core/models/user_model.dart';
+import 'package:chitchat/src/features/home/data/models/user_with_last_message_model.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ChatHeader extends StatelessWidget {
-  const ChatHeader({super.key, required this.users});
-  final List<UserModel> users;
+class ChatHeaders extends StatelessWidget {
+  const ChatHeaders({super.key, required this.users});
+  final List<UserWithLastMessage> users;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,12 @@ class ChatHeader extends StatelessWidget {
         : ListView.builder(
             itemCount: users.length,
             itemBuilder: (context, index) {
-              return _chatEntity(user: users[index]);
+              return _chatEntity(
+                  userWithLastMessage: users[index],
+                  onTap: () {
+                    getIt<HomeCubit>().navigateToChatScreen(
+                        receiver: users[index].user, context: context);
+                  });
             },
           );
   }
@@ -43,22 +50,30 @@ class ChatHeader extends StatelessWidget {
     );
   }
 
-  _chatEntity({required UserModel user}) {
-    return Padding(
-      padding: EdgeInsets.only(left: 24.0.w, bottom: 30.h, right: 24.w),
-      child: SizedBox(
-        height: 52.h,
-        child: Slidable(
-          direction: Axis.horizontal,
-          endActionPane: _endActionPane(),
-          child: Row(
-            children: [
-              _avatarImage(userPhoto: user.photo),
-              horizontalSpace(12.w),
-              _avatarNameAndLastMessage(name: user.name),
-              const Spacer(),
-              _timeAndUnreadMessage(),
-            ],
+  _chatEntity(
+      {required UserWithLastMessage userWithLastMessage,
+      required void Function() onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.only(left: 24.0.w, bottom: 30.h, right: 24.w),
+        child: SizedBox(
+          height: 52.h,
+          child: Slidable(
+            direction: Axis.horizontal,
+            endActionPane: _endActionPane(),
+            child: Row(
+              children: [
+                _avatarImage(userPhoto: userWithLastMessage.user.photo),
+                horizontalSpace(12.w),
+                _avatarNameAndLastMessage(
+                    name: userWithLastMessage.user.name,
+                    lastMessage: userWithLastMessage.lastMessage),
+                const Spacer(),
+                _timeAndUnreadMessage(
+                    unreadMessages: userWithLastMessage.unreadCount),
+              ],
+            ),
           ),
         ),
       ),
@@ -94,7 +109,8 @@ class ChatHeader extends StatelessWidget {
     );
   }
 
-  Widget _avatarNameAndLastMessage({required String name}) {
+  Widget _avatarNameAndLastMessage(
+      {required String name, required String lastMessage}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,37 +121,39 @@ class ChatHeader extends StatelessWidget {
         ),
         verticalSpace(6.h),
         Text(
-          'How are you today?',
+          lastMessage,
           style: AppTextStyles.poppinsFont12Gray50Regular1,
         )
       ],
     );
   }
 
-  Widget _timeAndUnreadMessage() {
+  Widget _timeAndUnreadMessage({required int unreadMessages}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(
-          '2 min ago',
-          style: AppTextStyles.poppinsFont12Gray50Light1,
-        ),
-        verticalSpace(9.h),
-        Container(
-          width: 22.w,
-          height: 22.h,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColor.red,
-          ),
-          child: Center(
-            child: Text(
-              '3',
-              style: AppTextStyles.poppinsFont12White100Black1,
-            ),
-          ),
-        ),
+        // Text(
+        //   '2 min ago',
+        //   style: AppTextStyles.poppinsFont12Gray50Light1,
+        // ),
+        // verticalSpace(9.h),
+        unreadMessages == 0
+            ? const SizedBox.shrink()
+            : Container(
+                width: 22.w,
+                height: 22.h,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColor.red,
+                ),
+                child: Center(
+                  child: Text(
+                    unreadMessages.toString(),
+                    style: AppTextStyles.poppinsFont12White100Black1,
+                  ),
+                ),
+              ),
       ],
     );
   }

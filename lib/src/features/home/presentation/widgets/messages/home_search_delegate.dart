@@ -1,7 +1,6 @@
 import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
-import 'package:chitchat/src/core/models/user_model.dart';
-import 'package:chitchat/src/core/routes/names.dart';
+import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/contact_info.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +48,12 @@ class HomeSearchDelegate extends SearchDelegate {
   Widget _searchBody() {
     return BlocProvider.value(
       value: getIt<HomeCubit>(),
-      child: BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+      child: BlocBuilder<HomeCubit, HomeState>(buildWhen: (previous, current) {
+        if (current is HomeLoadedMassagesSearchPage) {
+          return true;
+        }
+        return false;
+      }, builder: (context, state) {
         if (state is HomeLoadedMassagesSearchPage) {
           return state.filteredUsers.isEmpty
               ? _noResults()
@@ -76,14 +80,17 @@ class HomeSearchDelegate extends SearchDelegate {
       child: ListView.builder(
         itemCount: results.length,
         itemBuilder: (context, index) {
-          return ContactInfo(
-            bio: results[index].bio,
-            name: results[index].name,
-            userPhoto: results[index].photo,
-            onTap: () {
-              Navigator.pushNamed(context, RoutesName.chat,
-                  arguments: results[index]);
-            },
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: ContactInfo(
+              bio: results[index].bio,
+              name: results[index].name,
+              userPhoto: results[index].photo,
+              onTap: () {
+                getIt<HomeCubit>().navigateToChatScreen(
+                    receiver: results[index], context: context);
+              },
+            ),
           );
         },
       ),
