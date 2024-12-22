@@ -1,6 +1,6 @@
 import 'package:chitchat/src/core/cached_data/cached_data.dart';
 import 'package:chitchat/src/core/config/config.dart';
-import 'package:chitchat/src/core/models/user_model.dart';
+import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/core/widgets/error_dialog.dart';
 import 'package:chitchat/src/core/widgets/success_dialog.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';

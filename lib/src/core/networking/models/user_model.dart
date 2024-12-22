@@ -15,7 +15,7 @@ class UserModel {
     required this.bio,
   });
 
-  static UserModel fromJason(Map<String, dynamic> jason) {
+  static UserModel fromJson(Map<String, dynamic> jason) {
     return UserModel(
       email: jason['email'],
       phone: jason['phone'],

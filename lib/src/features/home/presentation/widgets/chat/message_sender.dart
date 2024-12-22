@@ -1,7 +1,7 @@
 import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
-import 'package:chitchat/src/core/models/user_model.dart';
+import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

@@ -13,10 +13,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MessagesBody extends StatelessWidget {
   const MessagesBody({super.key});
+  // todo move logic to cubit and make ui constant and remove green dot
 
   @override
   Widget build(BuildContext context) {
-    // getIt<HomeCubit>().loadData();
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return Column(
@@ -42,7 +42,7 @@ class MessagesBody extends StatelessWidget {
                   ? ChatHeaders(
                       users: state.usersHaveChatWith,
                     )
-                  : const Center(child: CircularProgressIndicator()),
+                  : const Center(child: SizedBox.shrink()),
             ),
           ],
         );

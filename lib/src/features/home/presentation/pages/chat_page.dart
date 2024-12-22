@@ -1,5 +1,5 @@
 import 'package:chitchat/src/core/constants/colors.dart';
-import 'package:chitchat/src/core/models/user_model.dart';
+import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/chat/chat_app_bar.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/chat/chat_view.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/chat/message_sender.dart';

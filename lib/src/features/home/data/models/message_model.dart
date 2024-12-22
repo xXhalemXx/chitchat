@@ -13,7 +13,7 @@ class MessageModel {
     this.isSeen = false,
   });
 
-  static MessageModel fromJason(Map<String, dynamic> jason) {
+  static MessageModel fromJson(Map<String, dynamic> jason) {
     return MessageModel(
       text: jason['text'],
       sender: jason['sender'],

@@ -20,26 +20,32 @@ class SettingsList extends StatelessWidget {
           _settingsItem(
               title: 'Account',
               svgName: 'key',
-              description: 'Privacy, security, change number'),
+              description: 'Privacy, security, change number',
+              onTap: () {}),
           _settingsItem(
               title: 'Chat',
               svgName: 'message',
-              description: 'Chat history, theme, wallpapers'),
+              description: 'Chat history, theme, wallpapers',
+              onTap: () {}),
           _settingsItem(
               title: 'Notifications',
               svgName: 'notifications',
-              description: 'Messages, group and others'),
+              description: 'Messages, group and others',
+              onTap: () {}),
           _settingsItem(
               title: 'Help',
               svgName: 'help',
-              description: 'Help center, contact us, privacy policy'),
+              description: 'Help center, contact us, privacy policy',
+              onTap: () {}),
           _settingsItem(
               title: 'Storage and data',
               svgName: 'data',
-              description: 'Network usage, storage usage'),
+              description: 'Network usage, storage usage',
+              onTap: () {}),
           _settingsItem(
             title: 'Invite a friend',
             svgName: 'users',
+            onTap: () {},
           ),
         ],
       ),
@@ -88,38 +94,44 @@ class SettingsList extends StatelessWidget {
   }
 
   _settingsItem(
-      {required String title, required String svgName, String? description}) {
+      {required String title,
+      required String svgName,
+      String? description,
+      required VoidCallback onTap}) {
     return Padding(
       padding: EdgeInsets.only(left: 24.0.w, bottom: 30.h, right: 24.w),
-      child: Row(
-        children: [
-          Container(
-            width: 44.w,
-            height: 44.h,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColor.lightBlue,
-            ),
-            child: Center(
-              child: SizedBox(
-                width: 24.w,
-                height: 24.h,
-                child: SvgPicture.asset(
-                  'assets/images/svgs/$svgName.svg',
+      child: GestureDetector(
+        onTap: onTap,
+        child: Row(
+          children: [
+            Container(
+              width: 44.w,
+              height: 44.h,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColor.lightBlue,
+              ),
+              child: Center(
+                child: SizedBox(
+                  width: 24.w,
+                  height: 24.h,
+                  child: SvgPicture.asset(
+                    'assets/images/svgs/$svgName.svg',
+                  ),
                 ),
               ),
             ),
-          ),
-          horizontalSpace(12.w),
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(title, style: AppTextStyles.poppinsFont16Black100Medium1),
-            verticalSpace(5.h),
-            description == null
-                ? const SizedBox.shrink()
-                : Text(description,
-                    style: AppTextStyles.poppinsFont12Gray50Light1),
-          ])
-        ],
+            horizontalSpace(12.w),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(title, style: AppTextStyles.poppinsFont16Black100Medium1),
+              verticalSpace(5.h),
+              description == null
+                  ? const SizedBox.shrink()
+                  : Text(description,
+                      style: AppTextStyles.poppinsFont12Gray50Light1),
+            ])
+          ],
+        ),
       ),
     );
   }
