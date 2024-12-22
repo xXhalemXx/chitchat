@@ -16,7 +16,7 @@ class MessagesBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getIt<HomeCubit>().loadData();
+    // getIt<HomeCubit>().loadData();
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return Column(
@@ -28,7 +28,9 @@ class MessagesBody extends StatelessWidget {
                 await showSearch(
                   context: context,
                   delegate: HomeSearchDelegate(),
-                );
+                ).then((_) {
+                  getIt<HomeCubit>().loadData();
+                });
               },
               rightWidget: _circleAvatar(),
             ),
@@ -37,7 +39,7 @@ class MessagesBody extends StatelessWidget {
             verticalSpace(30.h),
             GeneralHomeBody(
               body: (state is HomeLoadedMassagesPage)
-                  ? ChatHeader(
+                  ? ChatHeaders(
                       users: state.usersHaveChatWith,
                     )
                   : const Center(child: CircularProgressIndicator()),

@@ -29,30 +29,30 @@ class AppRoute {
         );
       case RoutesName.signUp:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<AuthCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<AuthCubit>(),
             child: const SignUpScreen(),
           ),
         );
       case RoutesName.login:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<AuthCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<AuthCubit>(),
             child: const LoginScreen(),
           ),
         );
       case RoutesName.home:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<HomeCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<HomeCubit>()..loadData(),
             child: const HomeScreen(),
           ),
         );
       case RoutesName.chat:
         final UserModel receiver = settings!.arguments as UserModel;
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<HomeCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<HomeCubit>()..getAllMassages(receiver: receiver),
             child: ChatPage(
               receiver: receiver,
             ),

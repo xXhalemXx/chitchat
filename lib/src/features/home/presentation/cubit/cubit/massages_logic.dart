@@ -41,6 +41,19 @@ class MassagesLogic {
           for (var element in querySnapshot.docs) {
             if (element.id == getIt<HomeCubit>().currentUser.uId) {
               allUsers.add(UserModel.fromJason(docMap));
+              QuerySnapshot<Map<String, dynamic>> querySnapshot =
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(getIt<HomeCubit>().currentUser.uId)
+                      .collection('chats')
+                      .doc(doc.id)
+                      .collection('messages')
+                      .orderBy('dateTime', descending: true)
+                      .get();
+              Map<String, dynamic> lastMessage =
+                  querySnapshot.docs.first.data();
+              print(
+                  'last message : ${lastMessage['text']} ,date : ${lastMessage['dateTime']}');
               break;
             }
           }
