@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
+import 'package:chitchat/src/core/helpers/date_converter.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/features/home/data/models/user_with_last_message_model.dart';
 import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -71,7 +73,8 @@ class ChatHeaders extends StatelessWidget {
                     lastMessage: userWithLastMessage.lastMessage),
                 const Spacer(),
                 _timeAndUnreadMessage(
-                    unreadMessages: userWithLastMessage.unreadCount),
+                    unreadMessages: userWithLastMessage.unreadCount,
+                    dateAndTime: userWithLastMessage.user.lastActivity),
               ],
             ),
           ),
@@ -93,18 +96,18 @@ class ChatHeaders extends StatelessWidget {
                 : CachedNetworkImageProvider(userPhoto) as ImageProvider,
           ),
         ),
-        Positioned(
-          bottom: 3.h,
-          right: 3.w,
-          child: Container(
-            width: 8.w,
-            height: 8.h,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColor.green,
-            ),
-          ),
-        ),
+        // Positioned(
+        //   bottom: 3.h,
+        //   right: 3.w,
+        //   child: Container(
+        //     width: 8.w,
+        //     height: 8.h,
+        //     decoration: BoxDecoration(
+        //       shape: BoxShape.circle,
+        //       color: AppColor.green,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -128,16 +131,22 @@ class ChatHeaders extends StatelessWidget {
     );
   }
 
-  Widget _timeAndUnreadMessage({required int unreadMessages}) {
+  Widget _timeAndUnreadMessage(
+      {required int unreadMessages, required String dateAndTime}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        // Text(
-        //   '2 min ago',
-        //   style: AppTextStyles.poppinsFont12Gray50Light1,
-        // ),
-        // verticalSpace(9.h),
+        BlocBuilder<HomeCubit, HomeState>(
+          buildWhen: (previous, current) => current is HomeUpdateLastSeen,
+          builder: (context, state) {
+            return Text(
+              getTimeDifference(dateAndTime: dateAndTime),
+              style: AppTextStyles.poppinsFont12Gray50Light1,
+            );
+          },
+        ),
+        verticalSpace(9.h),
         unreadMessages == 0
             ? const SizedBox.shrink()
             : Container(

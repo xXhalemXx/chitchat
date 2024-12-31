@@ -11,6 +11,8 @@ final class HomeLoadedMassagesPage extends HomeState {
   HomeLoadedMassagesPage({required this.usersHaveChatWith});
 }
 
+final class HomeUpdateLastSeen extends HomeState {}
+
 final class HomeLoadedMassagesSearchPage extends HomeState {
   final List<UserModel> filteredUsers;
   HomeLoadedMassagesSearchPage({required this.filteredUsers});

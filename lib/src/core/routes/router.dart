@@ -44,7 +44,9 @@ class AppRoute {
       case RoutesName.home:
         return MaterialPageRoute(
           builder: (_) => BlocProvider.value(
-            value: getIt<HomeCubit>()..loadData(),
+            value: getIt<HomeCubit>()
+              ..loadData()
+              ..updateDifferenceDateEveryMinute(),
             child: const HomeScreen(),
           ),
         );

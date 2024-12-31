@@ -5,7 +5,6 @@ import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.d
 import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/general_home_bar.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/general_home_body.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/messages/chat_header.dart';
-import 'package:chitchat/src/features/home/presentation/widgets/messages/home_search_delegate.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/messages/status_circles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,11 +12,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MessagesBody extends StatelessWidget {
   const MessagesBody({super.key});
-  // todo move logic to cubit and make ui constant and remove green dot
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
+      buildWhen: (previous, current) => current is HomeLoadedMassagesPage,
       builder: (context, state) {
         return Column(
           children: [
@@ -25,12 +23,7 @@ class MessagesBody extends StatelessWidget {
             GeneralHomeBar(
               title: 'Home',
               onTap: () async {
-                await showSearch(
-                  context: context,
-                  delegate: HomeSearchDelegate(),
-                ).then((_) {
-                  getIt<HomeCubit>().loadData();
-                });
+                getIt<HomeCubit>().showMessageDialog(context: context);
               },
               rightWidget: _circleAvatar(),
             ),
@@ -42,6 +35,7 @@ class MessagesBody extends StatelessWidget {
                   ? ChatHeaders(
                       users: state.usersHaveChatWith,
                     )
+                  // dead state screen rebuild only if state HomeLoadedMassagesPage
                   : const Center(child: SizedBox.shrink()),
             ),
           ],

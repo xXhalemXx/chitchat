@@ -1,15 +1,21 @@
-import 'package:chitchat/src/features/Authentication/presentation/cubit/authentication_logic.dart';
+import 'package:chitchat/src/core/cached_data/cached_data.dart';
+import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/networking/models/user_model.dart';
+import 'package:chitchat/src/core/routes/routes.dart';
+import 'package:chitchat/src/core/widgets/success_dialog.dart';
+import 'package:chitchat/src/features/Authentication/data/repo/repo.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/validators.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit({required this.validators, required this.authenticationLogic})
+  AuthCubit({required this.validators, required this.authRepository})
       : super(AuthInitial());
   Validators validators;
-  AuthenticationLogic authenticationLogic;
+  final AuthRepository authRepository;
 
   //** text editing controllers for sign up */
   final TextEditingController signUpNameController = TextEditingController();
@@ -45,34 +51,63 @@ class AuthCubit extends Cubit<AuthState> {
   //** authentication logic */
   Future<void> signInWithGoogle({required BuildContext context}) async {
     emit(AuthLoading());
-    await authenticationLogic.signInWithGoogle(context: context);
+    UserModel user = await authRepository.signInWithGoogle();
+    if (context.mounted) {
+      _saveUserModelAndNavigate(user: user, context: context);
+    }
     emit(AuthLoaded());
   }
 
   Future<void> loginWithEmailAndPassword(
       {required BuildContext context}) async {
-    emit(AuthLoading());
+    if (getIt<AuthCubit>().loginFormKey.currentState!.validate()) {
+      emit(AuthLoading());
+      UserModel user = await authRepository.loginWithEmailAndPassword(
+        email: loginEmailController.text,
+        password: loginPasswordController.text,
+      );
+      if (context.mounted) {
+        _saveUserModelAndNavigate(user: user, context: context);
+      }
+      emit(AuthLoaded());
+    }
+  }
 
-    await authenticationLogic.loginWithEmailAndPassword(
-      email: loginEmailController.text,
-      password: loginPasswordController.text,
-      context: context,
+  _saveUserModelAndNavigate(
+      {required UserModel user, required BuildContext context}) {
+    // save user details in cache
+    getIt<CacheData>().setString(key: 'UID', value: user.uId);
+    // save user details in global class
+    getIt<HomeCubit>().currentUser = user;
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      RoutesName.home,
+      (Route<dynamic> route) => false,
     );
-    emit(AuthLoaded());
+    authRepository.updateUserLastSeen(uId: user.uId);
   }
 
   Future<void> registerUsingEmailAndPassword({
     required BuildContext context,
   }) async {
-    emit(AuthLoading());
+    if (getIt<AuthCubit>().signUpFormKey.currentState!.validate()) {
+      emit(AuthLoading());
 
-    await authenticationLogic.registerWithEmailAndPassword(
-      email: signUpEmailController.text,
-      password: signUpPasswordController.text,
-      name: signUpNameController.text,
-      context: context,
-    );
+      await authRepository.registerWithEmailAndPassword(
+        email: signUpEmailController.text,
+        password: signUpPasswordController.text,
+        name: signUpNameController.text,
+      );
 
-    emit(AuthLoaded());
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (_) =>
+              const SuccessDialog(message: 'Your account created successfully'),
+        );
+      }
+
+      emit(AuthLoaded());
+    }
   }
 }

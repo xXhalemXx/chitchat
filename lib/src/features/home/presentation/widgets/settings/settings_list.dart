@@ -1,5 +1,9 @@
+import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
+import 'package:chitchat/src/core/routes/names.dart';
+import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -45,7 +49,15 @@ class SettingsList extends StatelessWidget {
           _settingsItem(
             title: 'Invite a friend',
             svgName: 'users',
-            onTap: () {},
+            onTap: () {
+              // reset all singelton data
+              getIt.resetLazySingleton<AuthCubit>();
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                RoutesName.onboarding,
+                (Route<dynamic> route) => false,
+              );
+            },
           ),
         ],
       ),

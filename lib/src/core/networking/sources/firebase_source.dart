@@ -3,10 +3,145 @@ import 'package:chitchat/src/features/home/data/models/message_model.dart';
 import 'package:chitchat/src/features/home/data/models/user_with_last_message_model.dart';
 import 'package:chitchat/src/core/networking/sources/sources.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
   HomeRemoteDataSourceFirebase({required this.firebaseFirestore});
+
+//** aut cubit function */
+  @override
+  Future<UserModel> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    //Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    // Sign in with the credential
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    // access fire store to see if user exists or not
+    DocumentSnapshot<Map<String, dynamic>> doc = await firebaseFirestore
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid ?? '')
+        .get();
+    if (doc.exists) {
+      return UserModel(
+        email: doc['email'],
+        phone: doc['phone'],
+        name: doc['name'],
+        uId: doc['uId'],
+        photo: doc['photo'],
+        bio: doc['bio'],
+        lastActivity: doc['lastActivity'],
+      );
+    } else {
+      //convert firebase user to User model
+      final UserModel user =
+          _covertFirebaseUserToUserModel(FirebaseAuth.instance.currentUser);
+
+      // save user in Firestore
+      await _saveUserInFireStore(
+        user: user,
+      );
+
+      return user;
+    }
+  }
+
+  @override
+  Future<UserModel> loginWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    UserCredential credential = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+    // access fire store to get user data
+    DocumentSnapshot<Map<String, dynamic>> doc = await firebaseFirestore
+        .collection('users')
+        .doc(credential.user?.uid ?? '')
+        .get();
+
+    return UserModel(
+      email: email,
+      phone: doc['phone'],
+      name: doc['name'],
+      uId: doc['uId'],
+      photo: doc['photo'],
+      bio: doc['bio'],
+      lastActivity: doc['lastActivity'],
+    );
+  }
+
+  @override
+  Future<UserModel> registerWithEmailAndPassword({
+    required String email,
+    required String password,
+    required String name,
+  }) async {
+    UserCredential userCredential =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    UserModel user = UserModel(
+      email: email,
+      phone: '',
+      name: name,
+      uId: userCredential.user!.uid,
+      photo: '',
+      bio: '',
+      lastActivity: DateTime.now().toString(),
+    );
+    // save user in Firestore
+    await _saveUserInFireStore(
+      user: user,
+    );
+
+    return user;
+  }
+
+//**private methods to save user in firestore */
+
+// to save user data in firestore
+  Future<void> _saveUserInFireStore({
+    required var user,
+  }) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uId)
+        .get();
+    if (!documentSnapshot.exists) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uId)
+          .set(user.toMap());
+    }
+  }
+
+// used in signInWithGoogle function
+  UserModel _covertFirebaseUserToUserModel(User? user) {
+    return UserModel(
+      email: user?.email ?? '',
+      phone: user?.phoneNumber ?? '',
+      name: user?.displayName ?? '',
+      uId: user?.uid ?? '',
+      photo: '',
+      bio: '',
+      lastActivity: DateTime.now().toString(),
+    );
+  }
+//** end of private methods */
+//** end of  aut cubit function */
+
+//** home cubit function */
   @override
   Future<List<UserModel>> fetchAllUsers({required String userId}) async {
     QuerySnapshot querySnapshot =
@@ -58,51 +193,51 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
   }
 
   @override
-  Future<List<UserWithLastMessage>> fetchUsersWithLastMessage(
-      {required String userId}) async {
-    List<UserWithLastMessage> usersWithLastMessage = [];
+  Stream<List<UserWithLastMessage>> fetchUsersWithLastMessage(
+      {required String userId}) {
+    return firebaseFirestore
+        .collection('users')
+        .snapshots()
+        .asyncMap((usersSnapshot) async {
+      List<UserWithLastMessage> usersWithLastMessage = [];
+      for (var userDoc in usersSnapshot.docs) {
+        if (userDoc.id != userId) {
+          UserModel user = UserModel.fromJson(userDoc.data());
 
-    QuerySnapshot usersSnapshot =
-        await FirebaseFirestore.instance.collection('users').get();
+          CollectionReference messagesRef = firebaseFirestore
+              .collection('users')
+              .doc(userId)
+              .collection('chats')
+              .doc(userDoc.id)
+              .collection('messages');
 
-    for (var userDoc in usersSnapshot.docs) {
-      if (userDoc.id != userId) {
-        UserModel user =
-            UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
+          // Fetch the last message
+          QuerySnapshot chatSnapshot = await messagesRef
+              .orderBy('dateTime', descending: true)
+              .limit(1)
+              .get();
 
-        CollectionReference messagesRef = firebaseFirestore
-            .collection('users')
-            .doc(userId)
-            .collection('chats')
-            .doc(userDoc.id)
-            .collection('messages');
+          // Count unread messages where receiver is the current user and isSeen is false
+          QuerySnapshot unreadSnapshot = await messagesRef
+              .where('receiver', isEqualTo: userId)
+              .where('isSeen', isEqualTo: false)
+              .get();
 
-        // Fetch the last message
-        QuerySnapshot chatSnapshot = await messagesRef
-            .orderBy('dateTime', descending: true)
-            .limit(1)
-            .get();
-
-        // Count unread messages where receiver is the current user and isSeen is false
-        QuerySnapshot unreadSnapshot = await messagesRef
-            .where('receiver', isEqualTo: userId)
-            .where('isSeen', isEqualTo: false)
-            .get();
-
-        int unreadCount = unreadSnapshot.docs.length;
-        if (chatSnapshot.docs.isNotEmpty) {
-          usersWithLastMessage.add(
-            UserWithLastMessage(
-              user: user,
-              lastMessage: chatSnapshot.docs.first['text'],
-              unreadCount: unreadCount,
-            ),
-          );
+          int unreadCount = unreadSnapshot.docs.length;
+          if (chatSnapshot.docs.isNotEmpty) {
+            usersWithLastMessage.add(
+              UserWithLastMessage(
+                user: user,
+                lastMessage: chatSnapshot.docs.first['text'],
+                unreadCount: unreadCount,
+              ),
+            );
+          }
         }
       }
-    }
 
-    return usersWithLastMessage;
+      return usersWithLastMessage;
+    });
   }
 
   @override
@@ -223,7 +358,14 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
       // Commit the batch
       await writeBatch.commit();
     }
-
-    print('All unread messages have been marked as read.');
   }
+
+  @override
+  Future<void> updateUserLastSeen({required String uId}) async {
+    await firebaseFirestore
+        .collection('users')
+        .doc(uId)
+        .update({'lastActivity': DateTime.now().toString()});
+  }
+  //**end of home cubit function */
 }

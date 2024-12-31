@@ -4,9 +4,9 @@ import 'package:chitchat/src/features/home/data/models/user_with_last_message_mo
 
 import '../../../../core/networking/sources/sources.dart';
 
-class HomeRepositoryImp {
+class HomeRepository {
   final HomeRemoteDataSource remoteDataSource;
-  HomeRepositoryImp({required this.remoteDataSource});
+  HomeRepository({required this.remoteDataSource});
 
   Future<List<UserModel>> fetchAllUsers({required String currentUserId}) async {
     return await remoteDataSource.fetchAllUsers(userId: currentUserId);
@@ -22,9 +22,9 @@ class HomeRepositoryImp {
     return await remoteDataSource.fetchUsersHaveChatWith(userId: userId);
   }
 
-  Future<List<UserWithLastMessage>> fetchUsersWithLastMessage(
-      {required String userId}) async {
-    return await remoteDataSource.fetchUsersWithLastMessage(userId: userId);
+  Stream<List<UserWithLastMessage>> fetchUsersWithLastMessage(
+      {required String userId}) {
+    return remoteDataSource.fetchUsersWithLastMessage(userId: userId);
   }
 
   Future<void> sendMessage(
@@ -41,5 +41,9 @@ class HomeRepositoryImp {
       {required String userId, required String receiverUId}) async {
     await remoteDataSource.markAllMessagesSeen(
         userId: userId, receiverUId: receiverUId);
+  }
+
+  Future<void> updateUserLastSeen({required String uId}) async {
+    await remoteDataSource.updateUserLastSeen(uId: uId);
   }
 }

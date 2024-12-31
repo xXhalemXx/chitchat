@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
-import 'package:chitchat/src/features/home/data/implements/implements.dart';
+import 'package:chitchat/src/features/home/data/repo/repo.dart';
 import 'package:chitchat/src/features/home/data/models/message_model.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/core/routes/names.dart';
 import 'package:chitchat/src/features/home/data/models/user_with_last_message_model.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/calls/calls_body.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/contacts/contacts_body.dart';
+import 'package:chitchat/src/features/home/presentation/widgets/messages/home_search_delegate.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/messages/messages_body.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/settings/settings_body.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,8 @@ import 'package:intl/intl.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit({required this.homeRepositoryImp}) : super(HomeInitial());
-  final HomeRepositoryImp homeRepositoryImp;
+  HomeCubit({required this.homeRepository}) : super(HomeInitial());
+  final HomeRepository homeRepository;
 
   // global variables to hold data to be used frequently without calling backend
   late UserModel currentUser;
@@ -33,23 +34,26 @@ class HomeCubit extends Cubit<HomeState> {
   final TextEditingController messageController = TextEditingController();
   final ScrollController scrollController = ScrollController();
 
-  // Future<void> getAllUsers() async {
-  //   await massagesLogic.getAllUsers();
-  // }
-
 //**  messages page functions  */
+  Stream<List<UserWithLastMessage>>? _chatHeaderStream;
+
   Future<dynamic> loadData() async {
-    // emit(HomeLoading());
-    List<UserWithLastMessage> usersHaveChatWith = await homeRepositoryImp
-        .fetchUsersWithLastMessage(userId: currentUser.uId);
-    print("usersHaveChatWith: $usersHaveChatWith");
-    emit(HomeLoadedMassagesPage(usersHaveChatWith: usersHaveChatWith));
+    homeRepository.updateUserLastSeen(uId: currentUser.uId);
+    _chatHeaderStream =
+        homeRepository.fetchUsersWithLastMessage(userId: currentUser.uId);
+    _chatHeaderStream!.listen(
+      (usersWithLastMessage) {
+        emit(HomeLoadedMassagesPage(usersHaveChatWith: usersWithLastMessage));
+      },
+    );
   }
 
   Future<dynamic> searchForUser({required String searchText}) async {
+    homeRepository.updateUserLastSeen(uId: currentUser.uId);
+
     emit(HomeLoading());
     List<UserModel> allUsers =
-        await homeRepositoryImp.fetchAllUsers(currentUserId: currentUser.uId);
+        await homeRepository.fetchAllUsers(currentUserId: currentUser.uId);
     List<UserModel> filteredUsers = [];
     if (searchText.isNotEmpty) {
       filteredUsers = allUsers
@@ -74,13 +78,33 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
+  Future<void> showMessageDialog({
+    required BuildContext context,
+  }) async {
+    await showSearch(
+      context: context,
+      delegate: HomeSearchDelegate(),
+    ).then((_) {
+      loadData();
+    });
+  }
+
+  Future<void> updateDifferenceDateEveryMinute() async {
+    while (true) {
+      await Future.delayed(const Duration(minutes: 1));
+      emit(HomeUpdateLastSeen());
+    }
+  }
+
 //**  chat page functions  */
   Stream<List<MessageModel>>? _messagesStream;
 
   Future<dynamic> getAllMassages({
     required UserModel receiver,
   }) async {
-    _messagesStream = homeRepositoryImp.fetchMessages(
+    homeRepository.updateUserLastSeen(uId: currentUser.uId);
+
+    _messagesStream = homeRepository.fetchMessages(
         receiver: receiver, userId: currentUser.uId);
     _messagesStream!.listen(
       (messages) {
@@ -88,7 +112,7 @@ class HomeCubit extends Cubit<HomeState> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           scrollController.jumpTo(scrollController.position.maxScrollExtent);
         });
-        homeRepositoryImp.markMessageSeen(
+        homeRepository.markMessageSeen(
             userId: currentUser.uId, receiverUId: receiver.uId);
         emit(HomeGetChatMassages(allMessages: messages));
       },
@@ -98,7 +122,9 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> sendMessage({
     required UserModel receiver,
   }) async {
-    homeRepositoryImp.sendMessage(
+    homeRepository.updateUserLastSeen(uId: currentUser.uId);
+
+    homeRepository.sendMessage(
         receiver: receiver,
         messageText: messageController.text,
         userId: currentUser.uId);
