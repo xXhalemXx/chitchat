@@ -1,3 +1,4 @@
+import 'package:chitchat/src/features/home/data/models/message_model.dart';
 import 'package:intl/intl.dart';
 
 String getTimeDifference({required String dateAndTime}) {
@@ -11,7 +12,7 @@ String getTimeDifference({required String dateAndTime}) {
   DateTime now = DateTime.now();
   Duration difference = now.difference(dateTime);
   String timeDifference = '';
-  print(difference.inSeconds);
+  // print(difference.inSeconds);
 
   if (difference.inSeconds < 60) {
     timeDifference = "Active now";
@@ -26,4 +27,29 @@ String getTimeDifference({required String dateAndTime}) {
   }
 
   return timeDifference;
+}
+
+String formatDateTime(String dateTimeStr) {
+  try {
+    // Parse the input string to a DateTime object
+    DateTime dateTime = DateTime.parse(dateTimeStr);
+
+    // Create a DateFormat instance for desired format
+    final DateFormat formatter = DateFormat('h:mm a');
+
+    // Format the DateTime object
+    return formatter.format(dateTime);
+  } catch (e) {
+    // Handle parsing errors
+    return 'Invalid DateTime';
+  }
+}
+
+bool isLastMessage(int index, List<MessageModel> messages) {
+  if (index < messages.length - 1) {
+    return formatDateTime(messages[index + 1].dateTime) !=
+        formatDateTime(messages[index].dateTime);
+  } else {
+    return true;
+  }
 }

@@ -13,7 +13,7 @@ class SettingsBody extends StatelessWidget {
     return Column(
       children: <Widget>[
         verticalSpace(60.h),
-        GeneralHomeBar(
+        GeneralAppBar(
           title: 'Settings',
           onTap: () {},
         ),

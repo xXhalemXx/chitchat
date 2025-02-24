@@ -1,10 +1,11 @@
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class GeneralHomeBar extends StatelessWidget {
-  const GeneralHomeBar(
+class GeneralAppBar extends StatelessWidget {
+  const GeneralAppBar(
       {super.key, required this.title, required this.onTap, this.rightWidget});
   final String title;
   final VoidCallback onTap;
@@ -27,7 +28,7 @@ class GeneralHomeBar extends StatelessWidget {
                   color: AppColor.white.withOpacity(0.2)),
               child: Center(
                 child: SvgPicture.asset(
-                  'assets/images/svgs/search.svg',
+                  Assets.assetsImagesSvgsSearch,
                   width: 22.w,
                   height: 22.h,
                 ),

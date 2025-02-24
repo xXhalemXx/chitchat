@@ -14,7 +14,7 @@ class ContactsBody extends StatelessWidget {
     return Column(
       children: <Widget>[
         verticalSpace(60.h),
-        GeneralHomeBar(
+        GeneralAppBar(
           title: 'Contacts',
           onTap: () {},
           rightWidget: const AddContact(),

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/date_converter.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
@@ -23,11 +24,12 @@ class ChatHeaders extends StatelessWidget {
             itemCount: users.length,
             itemBuilder: (context, index) {
               return _chatEntity(
-                  userWithLastMessage: users[index],
-                  onTap: () {
-                    getIt<HomeCubit>().navigateToChatScreen(
-                        receiver: users[index].user, context: context);
-                  });
+                userWithLastMessage: users[index],
+                onTap: () {
+                  getIt<HomeCubit>().navigateToChatScreen(
+                      receiver: users[index].user, context: context);
+                },
+              );
             },
           );
   }
@@ -92,7 +94,7 @@ class ChatHeaders extends StatelessWidget {
           decoration: const BoxDecoration(shape: BoxShape.circle),
           child: CircleAvatar(
             backgroundImage: userPhoto == ''
-                ? const AssetImage('assets/images/noProfilePic.png')
+                ? const AssetImage(Assets.assetsImagesNoProfilePic)
                 : CachedNetworkImageProvider(userPhoto) as ImageProvider,
           ),
         ),
@@ -175,16 +177,16 @@ class ChatHeaders extends StatelessWidget {
         horizontalSpace(16.w),
         _actionPaneButton(
             onTap: () {
-              print('tap bill');
+              // print('tap bill');
             },
-            svgName: 'assets/images/svgs/bill.svg',
+            svgName: Assets.assetsImagesSvgsBill,
             backgroundColor: AppColor.black),
         horizontalSpace(16.w),
         _actionPaneButton(
             onTap: () {
-              print('tap delete');
+              // print('tap delete');
             },
-            svgName: 'assets/images/svgs/trash.svg',
+            svgName: Assets.assetsImagesSvgsTrash,
             backgroundColor: AppColor.red),
       ],
     );

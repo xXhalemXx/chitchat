@@ -1,9 +1,9 @@
 import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/core/routes/names.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
-import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,34 +23,34 @@ class SettingsList extends StatelessWidget {
           verticalSpace(25.h),
           _settingsItem(
               title: 'Account',
-              svgName: 'key',
+              svgName: Assets.assetsImagesSvgsKey,
               description: 'Privacy, security, change number',
               onTap: () {}),
           _settingsItem(
               title: 'Chat',
-              svgName: 'message',
+              svgName: Assets.assetsImagesSvgsMessage,
               description: 'Chat history, theme, wallpapers',
               onTap: () {}),
           _settingsItem(
               title: 'Notifications',
-              svgName: 'notifications',
+              svgName: Assets.assetsImagesSvgsNotifications,
               description: 'Messages, group and others',
               onTap: () {}),
           _settingsItem(
               title: 'Help',
-              svgName: 'help',
+              svgName: Assets.assetsImagesSvgsHelp,
               description: 'Help center, contact us, privacy policy',
               onTap: () {}),
           _settingsItem(
               title: 'Storage and data',
-              svgName: 'data',
+              svgName: Assets.assetsImagesSvgsData,
               description: 'Network usage, storage usage',
               onTap: () {}),
           _settingsItem(
             title: 'Invite a friend',
             svgName: 'users',
             onTap: () {
-              // reset all singelton data
+              // reset all singleton data
               getIt.resetLazySingleton<AuthCubit>();
               Navigator.pushNamedAndRemoveUntil(
                 context,
@@ -84,7 +84,7 @@ class SettingsList extends StatelessWidget {
         SizedBox(
           width: 24.w,
           height: 24.h,
-          child: SvgPicture.asset('assets/images/svgs/qr_code.svg'),
+          child: SvgPicture.asset(Assets.assetsImagesSvgsQrCode),
         )
       ]),
     );
@@ -128,7 +128,7 @@ class SettingsList extends StatelessWidget {
                   width: 24.w,
                   height: 24.h,
                   child: SvgPicture.asset(
-                    'assets/images/svgs/$svgName.svg',
+                    svgName,
                   ),
                 ),
               ),

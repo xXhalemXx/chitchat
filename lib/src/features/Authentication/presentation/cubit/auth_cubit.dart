@@ -81,7 +81,7 @@ class AuthCubit extends Cubit<AuthState> {
     getIt<HomeCubit>().currentUser = user;
     Navigator.pushNamedAndRemoveUntil(
       context,
-      RoutesName.home,
+      RoutesName.dashboard,
       (Route<dynamic> route) => false,
     );
     authRepository.updateUserLastSeen(uId: user.uId);

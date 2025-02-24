@@ -6,6 +6,7 @@ import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cub
 import 'package:chitchat/src/features/Authentication/presentation/cubit/validators.dart';
 import 'package:chitchat/src/features/home/data/repo/repo.dart';
 import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/dashboard_cubit/dashboard_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 
@@ -28,4 +29,7 @@ void setupGetIT() {
   getIt.registerLazySingleton<HomeRepository>(
       () => HomeRepository(remoteDataSource: getIt()));
   getIt.registerSingleton<HomeCubit>(HomeCubit(homeRepository: getIt()));
+
+  // injection for dashboard cubit
+  getIt.registerLazySingleton<DashboardCubit>(() => DashboardCubit());
 }

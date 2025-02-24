@@ -1,3 +1,4 @@
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +17,7 @@ class NewCall extends StatelessWidget {
             shape: BoxShape.circle, color: AppColor.white.withOpacity(0.2)),
         child: Center(
           child: SvgPicture.asset(
-            'assets/images/svgs/new_call.svg',
+            Assets.assetsImagesSvgsNewCall,
             width: 22.w,
             height: 22.h,
           ),

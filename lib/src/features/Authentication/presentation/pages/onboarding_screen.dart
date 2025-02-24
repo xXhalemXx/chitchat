@@ -1,3 +1,4 @@
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/features/Authentication/presentation/widgets/onboarding_widgets/header_text.dart';
@@ -46,7 +47,8 @@ class OnboardingScreen extends StatelessWidget {
   BoxDecoration _boxDecorationFun() {
     return const BoxDecoration(
       image: DecorationImage(
-          image: AssetImage("assets/images/background.jpg"), fit: BoxFit.cover),
+          image: AssetImage(Assets.assetsImagesSplashBackground),
+          fit: BoxFit.cover),
     );
   }
 }

@@ -89,6 +89,5 @@ class LoadingButton extends StatelessWidget {
             ),
           )),
     );
-    ;
   }
 }

@@ -14,7 +14,7 @@ class CallsBody extends StatelessWidget {
     return Column(
       children: <Widget>[
         verticalSpace(60.h),
-        GeneralHomeBar(
+        GeneralAppBar(
           title: 'Calls',
           onTap: () {},
           rightWidget: const NewCall(),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:chitchat/src/features/home/data/repo/repo.dart';
 import 'package:chitchat/src/features/home/data/models/message_model.dart';
@@ -10,7 +12,6 @@ import 'package:chitchat/src/features/home/presentation/widgets/messages/home_se
 import 'package:chitchat/src/features/home/presentation/widgets/messages/messages_body.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/settings/settings_body.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 part 'home_state.dart';
 
@@ -20,15 +21,6 @@ class HomeCubit extends Cubit<HomeState> {
 
   // global variables to hold data to be used frequently without calling backend
   late UserModel currentUser;
-
-  //**  HomePage Variables */
-  int homeIndex = 0;
-  final List<Widget> homeBodes = const [
-    MessagesBody(),
-    CallsBody(),
-    ContactsBody(),
-    SettingsBody(),
-  ];
 
   //**  chat page controllers  */
   final TextEditingController messageController = TextEditingController();
@@ -46,6 +38,9 @@ class HomeCubit extends Cubit<HomeState> {
         emit(HomeLoadedMassagesPage(usersHaveChatWith: usersWithLastMessage));
       },
     );
+    Timer.periodic(const Duration(minutes: 1), (_) {
+      emit(HomeUpdateLastSeen());
+    });
   }
 
   Future<dynamic> searchForUser({required String searchText}) async {
@@ -78,7 +73,7 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> showMessageDialog({
+  Future<void> showSearchDelegate({
     required BuildContext context,
   }) async {
     await showSearch(
@@ -89,12 +84,12 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
-  Future<void> updateDifferenceDateEveryMinute() async {
-    while (true) {
-      await Future.delayed(const Duration(minutes: 1));
-      emit(HomeUpdateLastSeen());
-    }
-  }
+  // Future<void> updateDifferenceDateEveryMinute() async {
+  //   while (true) {
+  //     await Future.delayed(const Duration(minutes: 1));
+  //     emit(HomeUpdateLastSeen());
+  //   }
+  // }
 
 //**  chat page functions  */
   Stream<List<MessageModel>>? _messagesStream;
@@ -130,21 +125,5 @@ class HomeCubit extends Cubit<HomeState> {
         userId: currentUser.uId);
     messageController.clear();
     getAllMassages(receiver: receiver);
-  }
-
-  String formatDateTime(String dateTimeStr) {
-    try {
-      // Parse the input string to a DateTime object
-      DateTime dateTime = DateTime.parse(dateTimeStr);
-
-      // Create a DateFormat instance for desired format
-      final DateFormat formatter = DateFormat('h:mm a');
-
-      // Format the DateTime object
-      return formatter.format(dateTime);
-    } catch (e) {
-      // Handle parsing errors
-      return 'Invalid DateTime';
-    }
   }
 }

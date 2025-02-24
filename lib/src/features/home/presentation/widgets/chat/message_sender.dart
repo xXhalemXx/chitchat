@@ -1,4 +1,5 @@
 import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
@@ -23,7 +24,7 @@ class MessageSender extends StatelessWidget {
           horizontalSpace(24),
           // An SVG icon for the message sending button
           SvgPicture.asset(
-            'assets/images/svgs/attachment.svg',
+            Assets.assetsImagesSvgsAttachment,
             width: 26.w,
             height: 26.h,
           ),
@@ -34,7 +35,7 @@ class MessageSender extends StatelessWidget {
           ),
           horizontalSpace(16),
           SvgPicture.asset(
-            'assets/images/svgs/camera.svg',
+            Assets.assetsImagesSvgsCamera,
             width: 26.w,
             height: 26.h,
           ),

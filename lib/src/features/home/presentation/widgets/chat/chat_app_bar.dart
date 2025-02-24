@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chitchat/chitchat_app.dart';
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/colors.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +20,14 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing: -6,
       actions: [
         SvgPicture.asset(
-          'assets/images/svgs/phone.svg',
+          Assets.assetsImagesSvgsPhone,
           width: 18.w,
           height: 18.h,
           colorFilter: ColorFilter.mode(AppColor.black, BlendMode.srcIn),
         ),
         horizontalSpace(16),
         SvgPicture.asset(
-          'assets/images/svgs/video_call.svg',
+          Assets.assetsImagesSvgsVideoCall,
           width: 24.w,
           height: 24.h,
           colorFilter: ColorFilter.mode(AppColor.black, BlendMode.srcIn),
@@ -46,7 +46,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           CircleAvatar(
             backgroundImage: photo == ''
-                ? const AssetImage('assets/images/noProfilePic.png')
+                ? const AssetImage(Assets.assetsImagesNoProfilePic)
                 : CachedNetworkImageProvider(photo) as ImageProvider,
           ),
           Text(' $name'),

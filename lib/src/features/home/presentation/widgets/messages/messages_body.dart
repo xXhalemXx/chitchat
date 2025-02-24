@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/general_home_bar.dart';
@@ -20,10 +21,10 @@ class MessagesBody extends StatelessWidget {
         return Column(
           children: [
             verticalSpace(60.h),
-            GeneralHomeBar(
+            GeneralAppBar(
               title: 'Home',
               onTap: () async {
-                getIt<HomeCubit>().showMessageDialog(context: context);
+                getIt<HomeCubit>().showSearchDelegate(context: context);
               },
               rightWidget: _circleAvatar(),
             ),
@@ -48,7 +49,7 @@ class MessagesBody extends StatelessWidget {
     String userPhoto = getIt<HomeCubit>().currentUser.photo;
     return CircleAvatar(
       backgroundImage: userPhoto == ''
-          ? const AssetImage('assets/images/noProfilePic.png')
+          ? const AssetImage(Assets.assetsImagesNoProfilePic)
           : CachedNetworkImageProvider(userPhoto) as ImageProvider,
     );
   }

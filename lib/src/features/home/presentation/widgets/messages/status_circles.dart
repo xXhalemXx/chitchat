@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
@@ -64,7 +65,7 @@ class StatusCircles extends StatelessWidget {
               decoration: const BoxDecoration(shape: BoxShape.circle),
               child: CircleAvatar(
                 backgroundImage: userPhoto == ''
-                    ? const AssetImage('assets/images/noProfilePic.png')
+                    ? const AssetImage(Assets.assetsImagesNoProfilePic)
                     : CachedNetworkImageProvider(userPhoto) as ImageProvider,
               ),
             ),
