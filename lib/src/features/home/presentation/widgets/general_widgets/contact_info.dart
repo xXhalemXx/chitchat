@@ -1,7 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
+import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/user_circle_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -23,28 +22,14 @@ class ContactInfo extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          _avatarImage(userPhoto: userPhoto),
+          UserCircleAvatar(
+            userPhoto: userPhoto,
+            size: 52,
+          ),
           horizontalSpace(12.w),
           _nameAndBio(name: name, bio: bio),
         ],
       ),
-    );
-  }
-
-  Widget _avatarImage({required String userPhoto}) {
-    return Stack(
-      children: [
-        Container(
-          width: 52.w,
-          height: 52.h,
-          decoration: const BoxDecoration(shape: BoxShape.circle),
-          child: CircleAvatar(
-            backgroundImage: userPhoto == ''
-                ? const AssetImage(Assets.assetsImagesNoProfilePic)
-                : CachedNetworkImageProvider(userPhoto) as ImageProvider,
-          ),
-        ),
-      ],
     );
   }
 

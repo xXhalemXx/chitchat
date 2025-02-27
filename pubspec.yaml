@@ -35,6 +35,8 @@ dependencies:
   shared_preferences: ^2.3.3
   cached_network_image: ^3.4.1
   intl: ^0.20.1
+  # to make phone calls
+  flutter_webrtc: ^0.12.11
 
 dev_dependencies:
   flutter_test:

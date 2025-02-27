@@ -17,10 +17,11 @@ class RootApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (_, ch) => DismissKeyboard(
         child: MaterialApp(
+          navigatorKey: AppRouter.navigatorKey,
           theme: lightTheme,
           debugShowCheckedModeBanner: false,
           initialRoute: RoutesName.initial,
-          onGenerateRoute: AppRoute.generate,
+          onGenerateRoute: AppRouter.generate,
         ),
       ),
     );

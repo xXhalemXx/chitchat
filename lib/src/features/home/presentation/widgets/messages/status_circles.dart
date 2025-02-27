@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chitchat/src/core/config/config.dart';
-import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
-import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:chitchat/src/core/models/user_data.dart';
+import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/user_circle_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -36,7 +34,7 @@ class StatusCircles extends StatelessWidget {
           verticalSpace(6.h),
           Expanded(
             child: Text(
-              getIt<HomeCubit>().currentUser.name,
+              UserData.currentUser!.name,
               style: AppTextStyles.poppinsFont14White100Regular1,
               textAlign: TextAlign.center,
             ),
@@ -47,7 +45,7 @@ class StatusCircles extends StatelessWidget {
   }
 
   Widget _userImageWithAdd() {
-    String userPhoto = getIt<HomeCubit>().currentUser.photo;
+    String userPhoto = UserData.currentUser!.photo;
 
     return Stack(
       children: [
@@ -59,15 +57,9 @@ class StatusCircles extends StatelessWidget {
               border: Border.all(
                   color: AppColor.white.withOpacity(0.6), width: 1.50.w)),
           child: Center(
-            child: Container(
-              width: 52.w,
-              height: 52.h,
-              decoration: const BoxDecoration(shape: BoxShape.circle),
-              child: CircleAvatar(
-                backgroundImage: userPhoto == ''
-                    ? const AssetImage(Assets.assetsImagesNoProfilePic)
-                    : CachedNetworkImageProvider(userPhoto) as ImageProvider,
-              ),
+            child: UserCircleAvatar(
+              userPhoto: userPhoto,
+              size: 52,
             ),
           ),
         ),

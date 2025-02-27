@@ -9,4 +9,5 @@ class RoutesName {
   static const register = '/register';
   static const profile = '/profile';
   static const chat = '/chat';
+  static const outgoingCallPage = '/outgoing_call_page';
 }

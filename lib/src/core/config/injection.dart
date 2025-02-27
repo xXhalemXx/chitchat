@@ -5,8 +5,10 @@ import 'package:chitchat/src/features/Authentication/data/repo/repo.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/validators.dart';
 import 'package:chitchat/src/features/home/data/repo/repo.dart';
-import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/call_cubit/call_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/chat_cubit/chat_cubit.dart';
 import 'package:chitchat/src/features/home/presentation/cubit/dashboard_cubit/dashboard_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/messages_cubit/messages_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 
@@ -26,10 +28,11 @@ void setupGetIT() {
   getIt.registerLazySingleton<AuthCubit>(() =>
       AuthCubit(validators: getIt<Validators>(), authRepository: getIt()));
   //injection for home
+  getIt.registerLazySingleton<DashboardCubit>(() => DashboardCubit());
   getIt.registerLazySingleton<HomeRepository>(
       () => HomeRepository(remoteDataSource: getIt()));
-  getIt.registerSingleton<HomeCubit>(HomeCubit(homeRepository: getIt()));
-
-  // injection for dashboard cubit
-  getIt.registerLazySingleton<DashboardCubit>(() => DashboardCubit());
+  getIt
+      .registerSingleton<MessagesCubit>(MessagesCubit(homeRepository: getIt()));
+  getIt.registerSingleton<ChatCubit>(ChatCubit(homeRepository: getIt()));
+  getIt.registerSingleton<CallCubit>(CallCubit(homeRepository: getIt()));
 }

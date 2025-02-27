@@ -43,7 +43,7 @@ class GeneralHomeBody extends StatelessWidget {
       height: 3.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100.r),
-        color: AppColor.lighterGray,
+        color: AppColor.lightestGray,
       ),
     );
   }

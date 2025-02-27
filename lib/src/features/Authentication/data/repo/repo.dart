@@ -7,7 +7,7 @@ class AuthRepository {
   final HomeRemoteDataSource remoteDataSource;
   AuthRepository({required this.remoteDataSource});
 
-  Future<UserModel> signInWithGoogle() async {
+  Future<UserModel?> signInWithGoogle() async {
     return await remoteDataSource.signInWithGoogle();
   }
 

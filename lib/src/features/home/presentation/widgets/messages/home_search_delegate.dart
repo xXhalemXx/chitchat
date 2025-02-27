@@ -1,7 +1,7 @@
 import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
-import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/messages_cubit/messages_cubit.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/contact_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +27,7 @@ class HomeSearchDelegate extends SearchDelegate {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
-        getIt<HomeCubit>().loadData();
+        getIt<MessagesCubit>().loadData();
         Navigator.of(context).pop();
       },
     );
@@ -40,26 +40,22 @@ class HomeSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    getIt<HomeCubit>().searchForUser(searchText: query);
+    getIt<MessagesCubit>().searchForUser(searchText: query);
 
     return _searchBody();
   }
 
   Widget _searchBody() {
     return BlocProvider.value(
-      value: getIt<HomeCubit>(),
-      child: BlocBuilder<HomeCubit, HomeState>(buildWhen: (previous, current) {
-        if (current is HomeLoadedMassagesSearchPage) {
-          return true;
-        }
-        return false;
-      }, builder: (context, state) {
-        if (state is HomeLoadedMassagesSearchPage) {
+      value: getIt<MessagesCubit>(),
+      child:
+          BlocBuilder<MessagesCubit, MessagesState>(builder: (context, state) {
+        if (state.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
           return state.filteredUsers.isEmpty
               ? _noResults()
               : _searchResults(results: state.filteredUsers);
-        } else {
-          return const Center(child: CircularProgressIndicator());
         }
       }),
     );
@@ -87,7 +83,7 @@ class HomeSearchDelegate extends SearchDelegate {
               name: results[index].name,
               userPhoto: results[index].photo,
               onTap: () {
-                getIt<HomeCubit>().navigateToChatScreen(
+                getIt<MessagesCubit>().navigateToChatScreen(
                     receiver: results[index], context: context);
               },
             ),

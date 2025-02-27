@@ -1,3 +1,5 @@
+import 'package:chitchat/src/core/networking/models/call_history_model.dart';
+import 'package:chitchat/src/core/networking/models/ice_candidate_model.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/features/home/data/models/message_model.dart';
 import 'package:chitchat/src/features/home/data/models/user_with_last_message_model.dart';
@@ -35,8 +37,6 @@ class HomeRepository {
         receiver: receiver, messageText: messageText, userId: userId);
   }
 
-  getUsersHaveChatWith() {}
-
   Future<void> markMessageSeen(
       {required String userId, required String receiverUId}) async {
     await remoteDataSource.markAllMessagesSeen(
@@ -45,5 +45,44 @@ class HomeRepository {
 
   Future<void> updateUserLastSeen({required String uId}) async {
     await remoteDataSource.updateUserLastSeen(uId: uId);
+  }
+
+  Future<String> createCall(
+      String callerId, String receiverId, String calleeName) async {
+    return await remoteDataSource.createCall(callerId, receiverId, calleeName);
+  }
+
+  Future<void> sendOffer(String callId, Map<String, dynamic> offer) async {
+    await remoteDataSource.sendOffer(callId, offer);
+  }
+
+  Future<void> sendAnswer(String callId, Map<String, dynamic> answer) async {
+    await remoteDataSource.sendAnswer(callId, answer);
+  }
+
+  Future<void> addIceCandidate(
+      String callId, IceCandidateModel candidate) async {
+    await remoteDataSource.addIceCandidate(callId, candidate);
+  }
+
+  Future<Map<String, dynamic>?> getCallData(String callId) async {
+    return await remoteDataSource.getCallData(callId);
+  }
+
+  Stream<Map<String, dynamic>?> onCallDataChanged(String callId) {
+    return remoteDataSource.onCallDataChanged(callId);
+  }
+
+  Stream<Map<String, dynamic>> onNewCallCreated() {
+    return remoteDataSource.onNewCallCreated();
+  }
+
+  Future<void> onCallEnd(
+      String callId, String callerId, CallHistoryModel callData) async {
+    await remoteDataSource.onCallEnd(callId, callerId, callData);
+  }
+
+  Future<void> updateCallStatus(String callId, int callStatus) async {
+    await remoteDataSource.updateCallStatus(callId, callStatus);
   }
 }

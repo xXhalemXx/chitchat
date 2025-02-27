@@ -1,11 +1,11 @@
 import 'package:chitchat/src/core/cached_data/cached_data.dart';
 import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/models/user_data.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/core/routes/routes.dart';
 import 'package:chitchat/src/core/widgets/success_dialog.dart';
 import 'package:chitchat/src/features/Authentication/data/repo/repo.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/validators.dart';
-import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -51,8 +51,8 @@ class AuthCubit extends Cubit<AuthState> {
   //** authentication logic */
   Future<void> signInWithGoogle({required BuildContext context}) async {
     emit(AuthLoading());
-    UserModel user = await authRepository.signInWithGoogle();
-    if (context.mounted) {
+    UserModel? user = await authRepository.signInWithGoogle();
+    if (context.mounted && user != null) {
       _saveUserModelAndNavigate(user: user, context: context);
     }
     emit(AuthLoaded());
@@ -78,7 +78,7 @@ class AuthCubit extends Cubit<AuthState> {
     // save user details in cache
     getIt<CacheData>().setString(key: 'UID', value: user.uId);
     // save user details in global class
-    getIt<HomeCubit>().currentUser = user;
+    UserData.currentUser = user;
     Navigator.pushNamedAndRemoveUntil(
       context,
       RoutesName.dashboard,

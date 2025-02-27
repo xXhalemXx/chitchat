@@ -17,7 +17,7 @@ class OrWithLines extends StatelessWidget {
             child: Divider(
           thickness: textStyle.color == AppColor.gray ? 0.55.h : 0.15.h,
           color: textStyle.color == AppColor.gray
-              ? AppColor.lightGray
+              ? AppColor.lighterGray
               : AppColor.white,
         )),
         horizontalSpace(15.w),
@@ -27,7 +27,7 @@ class OrWithLines extends StatelessWidget {
             child: Divider(
           thickness: textStyle.color == AppColor.gray ? 0.55.h : 0.15.h,
           color: textStyle.color == AppColor.gray
-              ? AppColor.lightGray
+              ? AppColor.lighterGray
               : AppColor.white,
         )),
       ]),

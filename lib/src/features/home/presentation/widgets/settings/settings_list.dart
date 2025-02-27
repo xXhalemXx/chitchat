@@ -46,19 +46,19 @@ class SettingsList extends StatelessWidget {
               svgName: Assets.assetsImagesSvgsData,
               description: 'Network usage, storage usage',
               onTap: () {}),
-          _settingsItem(
-            title: 'Invite a friend',
-            svgName: 'users',
-            onTap: () {
-              // reset all singleton data
-              getIt.resetLazySingleton<AuthCubit>();
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                RoutesName.onboarding,
-                (Route<dynamic> route) => false,
-              );
-            },
-          ),
+          // _settingsItem(
+          //   title: 'Invite a friend',
+          //   svgName: 'users',
+          //   onTap: () {
+          //     // reset all singleton data
+          //     getIt.resetLazySingleton<AuthCubit>();
+          //     Navigator.pushNamedAndRemoveUntil(
+          //       context,
+          //       RoutesName.onboarding,
+          //       (Route<dynamic> route) => false,
+          //     );
+          //   },
+          // ),
         ],
       ),
     );

@@ -1,13 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
-import 'package:chitchat/src/core/helpers/date_converter.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/features/home/data/models/user_with_last_message_model.dart';
-import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/messages_cubit/messages_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/user_circle_avatar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,6 +16,7 @@ class ChatHeaders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // log('last activity: ${users[0].user.lastActivity}');
     return users.isEmpty
         ? _noChatsYet()
         : ListView.builder(
@@ -26,7 +25,7 @@ class ChatHeaders extends StatelessWidget {
               return _chatEntity(
                 userWithLastMessage: users[index],
                 onTap: () {
-                  getIt<HomeCubit>().navigateToChatScreen(
+                  getIt<MessagesCubit>().navigateToChatScreen(
                       receiver: users[index].user, context: context);
                 },
               );
@@ -68,7 +67,9 @@ class ChatHeaders extends StatelessWidget {
             endActionPane: _endActionPane(),
             child: Row(
               children: [
-                _avatarImage(userPhoto: userWithLastMessage.user.photo),
+                _avatarImage(
+                    userPhoto: userWithLastMessage.user.photo,
+                    lastActivity: userWithLastMessage.user.lastActivity),
                 horizontalSpace(12.w),
                 _avatarNameAndLastMessage(
                     name: userWithLastMessage.user.name,
@@ -85,31 +86,28 @@ class ChatHeaders extends StatelessWidget {
     );
   }
 
-  Widget _avatarImage({required String userPhoto}) {
+  Widget _avatarImage(
+      {required String userPhoto, required String lastActivity}) {
     return Stack(
       children: [
-        Container(
-          width: 52.w,
-          height: 52.h,
-          decoration: const BoxDecoration(shape: BoxShape.circle),
-          child: CircleAvatar(
-            backgroundImage: userPhoto == ''
-                ? const AssetImage(Assets.assetsImagesNoProfilePic)
-                : CachedNetworkImageProvider(userPhoto) as ImageProvider,
+        UserCircleAvatar(
+          userPhoto: userPhoto,
+          size: 52,
+        ),
+        Positioned(
+          bottom: 3.h,
+          right: 3.w,
+          child: Container(
+            width: 10.w,
+            height: 10.h,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: getIt<MessagesCubit>().isActiveNow(lastActivity)
+                  ? AppColor.green
+                  : AppColor.lightGray,
+            ),
           ),
         ),
-        // Positioned(
-        //   bottom: 3.h,
-        //   right: 3.w,
-        //   child: Container(
-        //     width: 8.w,
-        //     height: 8.h,
-        //     decoration: BoxDecoration(
-        //       shape: BoxShape.circle,
-        //       color: AppColor.green,
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
@@ -139,14 +137,9 @@ class ChatHeaders extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        BlocBuilder<HomeCubit, HomeState>(
-          buildWhen: (previous, current) => current is HomeUpdateLastSeen,
-          builder: (context, state) {
-            return Text(
-              getTimeDifference(dateAndTime: dateAndTime),
-              style: AppTextStyles.poppinsFont12Gray50Light1,
-            );
-          },
+        Text(
+          getIt<MessagesCubit>().getTimeDifference(dateAndTime: dateAndTime),
+          style: AppTextStyles.poppinsFont12Gray50Light1,
         ),
         verticalSpace(9.h),
         unreadMessages == 0

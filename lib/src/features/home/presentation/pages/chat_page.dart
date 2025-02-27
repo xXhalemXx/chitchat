@@ -1,5 +1,8 @@
+import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/colors.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/chat_cubit/chat_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/widgets/calls/incoming_call_wrapper.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/chat/chat_app_bar.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/chat/chat_view.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/chat/message_sender.dart';
@@ -15,17 +18,26 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: ChatAppBar(photo: receiver.photo, name: receiver.name),
-      body: Column(
-        children: [
-          ChatView(receiver: receiver),
-          Divider(
-            height: 1,
-            color: AppColor.lightBlue,
+    return IncomingCallWrapper(
+      child: PopScope(
+        onPopInvokedWithResult: (didPop, _) {
+          if (didPop) {
+            getIt<ChatCubit>().chatPageClosed();
+          }
+        },
+        child: Scaffold(
+          appBar: ChatAppBar(receiver: receiver),
+          body: Column(
+            children: [
+              ChatView(receiver: receiver),
+              Divider(
+                height: 1,
+                color: AppColor.lightBlue,
+              ),
+              MessageSender(receiver: receiver),
+            ],
           ),
-          MessageSender(receiver: receiver),
-        ],
+        ),
       ),
     );
   }

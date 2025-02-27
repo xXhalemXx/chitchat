@@ -122,7 +122,7 @@ class CallDetails extends StatelessWidget {
         width: double.infinity,
         height: 1.h,
         decoration: BoxDecoration(
-          color: AppColor.lighterGray,
+          color: AppColor.lightestGray,
         ),
       ),
     );

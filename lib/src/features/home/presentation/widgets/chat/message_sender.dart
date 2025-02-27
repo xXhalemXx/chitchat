@@ -3,7 +3,7 @@ import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
-import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/chat_cubit/chat_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -46,7 +46,7 @@ class MessageSender extends StatelessWidget {
               color: AppColor.black.withOpacity(0.4),
             ), // Use an icon for the send button
             onPressed: () {
-              getIt<HomeCubit>().sendMessage(
+              getIt<ChatCubit>().sendMessage(
                 receiver: receiver,
               );
             }, // Call the _sendMessage method when pressed
@@ -60,7 +60,7 @@ class MessageSender extends StatelessWidget {
     return SizedBox(
       height: 40.h,
       child: TextField(
-        controller: getIt<HomeCubit>()
+        controller: getIt<ChatCubit>()
             .messageController, // Use the controller for the text field
         decoration: InputDecoration(
           filled: true,

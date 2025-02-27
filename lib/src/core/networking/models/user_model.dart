@@ -6,6 +6,7 @@ class UserModel {
   final String photo;
   final String bio;
   final String lastActivity;
+  final List callsHistory;
 
   UserModel({
     required this.email,
@@ -15,6 +16,7 @@ class UserModel {
     required this.photo,
     required this.bio,
     required this.lastActivity,
+    required this.callsHistory,
   });
 
   static UserModel fromJson(Map<String, dynamic> jason) {
@@ -26,6 +28,7 @@ class UserModel {
       photo: jason['photo'],
       bio: jason['bio'],
       lastActivity: jason['lastActivity'],
+      callsHistory: jason['callsHistory'],
     );
   }
 
@@ -36,6 +39,7 @@ class UserModel {
         'uId': uId,
         'photo': photo,
         'bio': bio,
-        'lastActivity': lastActivity
+        'lastActivity': lastActivity,
+        'callsHistory': callsHistory,
       };
 }

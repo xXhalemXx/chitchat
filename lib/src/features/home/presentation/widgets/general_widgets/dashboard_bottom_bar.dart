@@ -62,7 +62,8 @@ class DashboardBottomBar extends StatelessWidget {
         svgPath,
         width: 26.w,
         height: 26.h,
-        colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(
+            isSelected ? AppColor.darkerBlue : AppColor.gray, BlendMode.srcIn),
       ),
       label: label,
     );
