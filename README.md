@@ -30,8 +30,13 @@ The Chit Chat app is a dynamic communication platform designed to keep users con
 ## Usage
 
 ### **Splash Screen**
+ **Splash Screen for Android > 13.0**  
+   The splash screen is displayed on devices running Android versions 13.0 and above.  
+<p align="center">
+<img src="https://github.com/user-attachments/assets//74667931-b8b7-4889-a3a7-8ba2fcc99f08"  width="300" height="600">
+
  **Splash Screen for Android < 12.0**  
-   The splash screen is displayed on devices running Android versions below 12.0.  
+   The splash screen is displayed on devices running Android versions 12.0 and below.  
 <p align="center">
 <img src="https://github.com/user-attachments/assets//33062776-3dad-4b10-a68a-827391ebfe52"  width="300" height="600">
   
@@ -118,13 +123,77 @@ When there is an active user, a green dot is shown in their dot, and the last se
   
 ---
   
-### incoming call
+### incoming call (video/audio)
 <p align="center">
-<img src="https://github.com/user-attachments/assets/4c6e6ae9-86d4-483f-b6ed-615c4f081666"  width="300" height="600">
-  
+<img src="https://github.com/user-attachments/assets/02667d52-295b-49f1-91c3-b467ecef5a31"  width="300" height="600">
+<img src="https://github.com/user-attachments/assets/483ddd7c-eaea-4afe-9b36-ad8c1c91f20c"  width="300" height="600">
+
 ---
   
+### diffrant responses
+**When receiver cancels**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/676b4783-52ac-4862-ae2f-cdf41e205149"  width="300" height="600">
+  
+**receiver didn't answer or reject after 30s**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/40c64696-d939-420c-a769-85abb06490c3"  width="300" height="600">
+  
+**receiver accepted audio call**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/c172444e-7980-4201-b1ea-48aca522a7b8"  width="300" height="600">
+  
+**receiver accepted video call**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/1b56108d-bfa0-42b5-ba2f-2e23f83ecab9"  width="300" height="600">
+<img src="https://github.com/user-attachments/assets/18e6d5b2-644b-4a82-aea0-0798f97dc295"  width="300" height="600">
+
+---
+### Call History page
+<p align="center">
+<img src="https://github.com/user-attachments/assets/29ed665c-4c50-4ea5-a1b4-016131a14067"  width="300" height="600">
+  
+---
+### Contacts page
+<p align="center">
+<img src="https://github.com/user-attachments/assets/51ec31af-2465-44a8-b0a9-f8db7c657fde"  width="300" height="600">
+  
+---
+### Settings page
+<p align="center">
+<img src="https://github.com/user-attachments/assets/a5763d26-eef5-4a59-a681-bf5bd21e9963"  width="300" height="600">
+   
+**Upload new Image dialog**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/b69adf45-0d7d-434d-85d9-d613df109988"  width="300" height="600">
+ 
+**Upload new Image using camera**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/e45c56dd-19e1-43f3-8ea0-a8c16cf143cd"  width="300" height="600>
+  
+**Upload new Image using Gallery**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/00a10db1-94f5-4902-8595-49b19c3c3e85"  width="300" height="600>
+    
+**adjust Image size**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/6aee08c6-d085-499c-9359-9f93b91c3819"  width="300" height="600>
+ 
+**Change Name**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/27425e29-1cfd-4388-bbe1-66be257ce60b"  width="300" height="600>
+  
+**Change bio**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/00f7d413-ab22-4054-ab91-763008073cdc"  width="300" height="600>
+ 
+**final profile page**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/f8ea075d-4482-4ac1-9a3c-fff3d7b98a72"  width="300" height="600>
+ 
+---
 ## Next Features will be added soon 😢
+
 ---
 
 ## **Credits**
