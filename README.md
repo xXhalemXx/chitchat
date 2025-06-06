@@ -1,5 +1,5 @@
 # ChitChat App
-The ChitChat App is a powerful Chat application used to communicate with your friends or your family.
+The ChitChat App is a powerful Chat application used to communicate with friends and family.
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -166,31 +166,44 @@ When there is an active user, a green dot is shown in their dot, and the last se
 **Upload new Image dialog**
 <p align="center">
 <img src="https://github.com/user-attachments/assets/b69adf45-0d7d-434d-85d9-d613df109988"  width="300" height="600">
- 
-**Upload new Image using camera**
-<p align="center">
-<img src="https://github.com/user-attachments/assets/e45c56dd-19e1-43f3-8ea0-a8c16cf143cd"  width="300" height="600>
+
   
-**Upload new Image using Gallery**
+**Upload a new Image using the camera**
 <p align="center">
-<img src="https://github.com/user-attachments/assets/00a10db1-94f5-4902-8595-49b19c3c3e85"  width="300" height="600>
-    
-**adjust Image size**
+<img src="https://github.com/user-attachments/assets/e45c56dd-19e1-43f3-8ea0-a8c16cf143cd"  width="300" height="600">
+</p>
+
+<br>
+
+**Upload a new Image using the Gallery**
 <p align="center">
-<img src="https://github.com/user-attachments/assets/6aee08c6-d085-499c-9359-9f93b91c3819"  width="300" height="600>
- 
-**Change Name**
+<img src="https://github.com/user-attachments/assets/00a10db1-94f5-4902-8595-49b19c3c3e85"  width="300" height="600">
+</p>
+
+**Adjust image size**  
+<br>  
 <p align="center">
-<img src="https://github.com/user-attachments/assets/27425e29-1cfd-4388-bbe1-66be257ce60b"  width="300" height="600>
-  
-**Change bio**
+<img src="https://github.com/user-attachments/assets/6aee08c6-d085-499c-9359-9f93b91c3819"  width="300" height="600">
+</p>
+
+**Change Name**  
+<br>  
 <p align="center">
-<img src="https://github.com/user-attachments/assets/00f7d413-ab22-4054-ab91-763008073cdc"  width="300" height="600>
- 
-**final profile page**
+<img src="https://github.com/user-attachments/assets/27425e29-1cfd-4388-bbe1-66be257ce60b"  width="300" height="600">
+</p>
+
+**Change bio**  
+<br>  
 <p align="center">
-<img src="https://github.com/user-attachments/assets/f8ea075d-4482-4ac1-9a3c-fff3d7b98a72"  width="300" height="600>
- 
+<img src="https://github.com/user-attachments/assets/00f7d413-ab22-4054-ab91-763008073cdc"  width="300" height="600">
+</p>
+
+**Final profile page**  
+<br>  
+<p align="center">
+<img src="https://github.com/user-attachments/assets/f8ea075d-4482-4ac1-9a3c-fff3d7b98a72"  width="300" height="600">
+</p>
+
 ---
 ## Next Features will be added soon 😢
 
@@ -221,6 +234,11 @@ One of the most important helpers in this project is the third-party packages. B
 | intl                     | ^0.20.1      | Offers internationalization and localization support.        |
 | flutter_webrtc           | ^0.12.11     | Enables voice and video communication using WebRTC.          |
 | audioplayers             | ^6.2.0       | Plays audio files, useful for call ringtones and alerts.       |
+| permission_handler      | ^12.0.0+1   | Manages app permissions dynamically.                      |
+| image_picker           | ^1.1.2       | Allows users to pick images from the gallery or camera.   |
+| supabase_flutter       | ^2.9.0       | Provides cloud storage for user photos via Supabase.      |
+| image_cropper          | ^9.1.0       | Enables cropping and editing images within the app.       |
+| flutter_image_compress | ^2.4.0       | Reduces image size for optimized storage and uploads.     |
 
  
  
