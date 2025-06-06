@@ -18,7 +18,7 @@ class FirebaseStrings {
   static const String exists = 'exists';
   static const String signaling = 'signaling';
   static const String callsHistory = 'callsHistory';
-  static const String callerId = 'callerId';
+  static const String callerData = 'callerData';
   static const String callId = 'callId';
   static const String receiverId = 'receiverId';
   static const String offer = 'offer';
@@ -26,4 +26,12 @@ class FirebaseStrings {
   static const String iceCandidates = 'iceCandidates';
   static const String userNotAnswering = 'user not answering';
   static const String callStatus = 'callStatus';
+  static const String allCalls = 'allCalls';
+  static const String callType = 'callType';
+}
+
+class SharedPrefStrings {
+  static const String idToken = 'idToken';
+  static const String userData = 'useData';
+  static const String idTokenExpiration = 'idTokenExpiration';
 }

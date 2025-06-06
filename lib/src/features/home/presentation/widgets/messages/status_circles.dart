@@ -11,33 +11,26 @@ class StatusCircles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 21.0.w),
-      child: SizedBox(
-        height: 82.h,
-        width: double.infinity,
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: _circleWithName(),
-        ),
+      padding: EdgeInsets.only(left: 20.0.w),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: _circleWithName(),
       ),
     );
   }
 
   Widget _circleWithName() {
-    return Container(
-      margin: EdgeInsets.only(right: 12.0.w),
-      width: 58.w,
-      height: 82.h,
+    return SizedBox(
+      width: 60.w,
       child: Column(
         children: [
           _userImageWithAdd(),
-          verticalSpace(6.h),
-          Expanded(
-            child: Text(
-              UserData.currentUser!.name,
-              style: AppTextStyles.poppinsFont14White100Regular1,
-              textAlign: TextAlign.center,
-            ),
+          verticalSpace(6),
+          Text(
+            UserData.currentUser!.name,
+            style: AppTextStyles.poppinsFont14White100Regular1,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
           )
         ],
       ),
@@ -55,7 +48,7 @@ class StatusCircles extends StatelessWidget {
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                  color: AppColor.white.withOpacity(0.6), width: 1.50.w)),
+                  color: AppColor.white.withValues(alpha: 0.6), width: 1.50.w)),
           child: Center(
             child: UserCircleAvatar(
               userPhoto: userPhoto,
@@ -65,7 +58,7 @@ class StatusCircles extends StatelessWidget {
         ),
         Positioned(
           bottom: 2.h,
-          right: 0.w,
+          right: 1.w,
           child: Container(
             width: 16.w,
             height: 16.h,

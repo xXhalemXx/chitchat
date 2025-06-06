@@ -32,11 +32,28 @@ dependencies:
   flutter_facebook_auth: ^7.0.1
   flutter_slidable: ^3.1.1
   cloud_firestore: ^5.4.5
+  # to save user data locally
   shared_preferences: ^2.3.3
+  flutter_secure_storage: ^9.2.4
   cached_network_image: ^3.4.1
   intl: ^0.20.1
   # to make phone calls
   flutter_webrtc: ^0.12.11
+  # to play ringtone when incoming call
+  audioplayers: ^6.2.0
+  # to handel permissions
+  permission_handler: ^12.0.0+1
+  # to pick images from gallery
+  image_picker: ^1.1.2
+  # to save users photos in cloud
+  supabase_flutter: ^2.9.0
+  #to edit image 
+  image_cropper: ^9.1.0
+  #to reduce image size
+  flutter_image_compress: ^2.4.0
+
+
+
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +65,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/mp3/
     - assets/images/icons/
     - assets/images/svgs/
   

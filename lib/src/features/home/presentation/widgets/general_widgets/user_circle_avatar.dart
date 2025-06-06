@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserCircleAvatar extends StatelessWidget {
-  const UserCircleAvatar({super.key, this.userPhoto, this.size});
+  const UserCircleAvatar({super.key, this.userPhoto, required this.size});
   final String? userPhoto;
-  final double? size;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: size?.w,
-      height: size?.h,
+      width: size.w,
+      height: size.h,
       decoration: const BoxDecoration(shape: BoxShape.circle),
       child: CircleAvatar(
         backgroundImage: userPhoto == '' || userPhoto == null

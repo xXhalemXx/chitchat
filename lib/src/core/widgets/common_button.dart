@@ -46,7 +46,6 @@ class AppTextButton extends StatelessWidget {
           color: backgroundColor,
           borderRadius: BorderRadius.circular(16.0.r),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
         child: Center(
           child: Text(
             buttonText,

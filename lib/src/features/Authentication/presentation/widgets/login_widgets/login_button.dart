@@ -24,7 +24,7 @@ class LoginButton extends StatelessWidget {
               buttonText: 'Log in',
               textStyle: AppTextStyles.poppinsFont16White100Bold1,
               onPressed: () {
-                getIt<AuthCubit>().loginWithEmailAndPassword(context: context);
+                getIt<AuthCubit>().loginWithEmailAndPassword();
               },
             ),
           );

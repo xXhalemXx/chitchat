@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:chitchat/src/core/models/user_data.dart';
+import 'package:chitchat/src/core/networking/network_exceptions.dart';
 import 'package:chitchat/src/features/home/data/repo/repo.dart';
 import 'package:chitchat/src/features/home/data/models/message_model.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
@@ -34,34 +35,42 @@ class ChatCubit extends Cubit<ChatState> {
   Future<dynamic> getAllMassages({
     required UserModel receiver,
   }) async {
-    homeRepository.updateUserLastSeen(uId: UserData.currentUser!.uId);
+    try {
+      homeRepository.updateUserLastSeen(uId: UserData.currentUser!.uId);
 
-    _messagesStream = homeRepository.fetchMessages(
-        receiver: receiver, userId: UserData.currentUser!.uId);
-    _subscription = _messagesStream!.listen(
-      (messages) {
-        //scroll to the bottom of the chat list when new messages arrive
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          scrollController.jumpTo(scrollController.position.maxScrollExtent);
-        });
-        homeRepository.markMessageSeen(
-            userId: UserData.currentUser!.uId, receiverUId: receiver.uId);
-        emit(state.copyWith(allMessages: messages));
-      },
-    );
+      _messagesStream = homeRepository.fetchMessages(
+          receiver: receiver, userId: UserData.currentUser!.uId);
+      _subscription = _messagesStream!.listen(
+        (messages) {
+          //scroll to the bottom of the chat list when new messages arrive
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            scrollController.jumpTo(scrollController.position.maxScrollExtent);
+          });
+          homeRepository.markMessageSeen(
+              userId: UserData.currentUser!.uId, receiverUId: receiver.uId);
+          emit(state.copyWith(allMessages: messages));
+        },
+      );
+    } catch (error) {
+      NetworkExceptions.showErrorDialog(error);
+    }
   }
 
   Future<void> sendMessage({
     required UserModel receiver,
   }) async {
-    homeRepository.updateUserLastSeen(uId: UserData.currentUser!.uId);
+    try {
+      homeRepository.updateUserLastSeen(uId: UserData.currentUser!.uId);
 
-    homeRepository.sendMessage(
-        receiver: receiver,
-        messageText: messageController.text,
-        userId: UserData.currentUser!.uId);
-    messageController.clear();
-    getAllMassages(receiver: receiver);
+      homeRepository.sendMessage(
+          receiver: receiver,
+          messageText: messageController.text,
+          userId: UserData.currentUser!.uId);
+      messageController.clear();
+      getAllMassages(receiver: receiver);
+    } catch (error) {
+      NetworkExceptions.showErrorDialog(error);
+    }
   }
 
   bool isLastMessage(int index, List<MessageModel> messages) {

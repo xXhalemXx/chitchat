@@ -12,7 +12,7 @@ class SignUpButton extends StatelessWidget {
     return AppTextButton(
       buttonWidth: 320.w,
       buttonHeight: 48.h,
-      backgroundColor: AppColor.white.withOpacity(0.37),
+      backgroundColor: AppColor.white.withValues(alpha: 0.37),
       buttonText: 'Sign up within mail',
       textStyle: AppTextStyles.poppinsFont16White100Medium1,
       onPressed: () {

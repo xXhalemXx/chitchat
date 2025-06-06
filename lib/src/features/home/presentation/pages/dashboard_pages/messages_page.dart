@@ -9,7 +9,6 @@ import 'package:chitchat/src/features/home/presentation/widgets/messages/chat_he
 import 'package:chitchat/src/features/home/presentation/widgets/messages/status_circles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MessagesPage extends StatelessWidget {
   const MessagesPage({super.key});
@@ -19,19 +18,20 @@ class MessagesPage extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
-            verticalSpace(60.h),
+            verticalSpace(60),
             GeneralAppBar(
               title: 'Home',
               onTap: () async {
                 getIt<MessagesCubit>().showSearchDelegate(context: context);
               },
               rightWidget: UserCircleAvatar(
+                size: 44,
                 userPhoto: UserData.currentUser!.photo,
               ),
             ),
-            verticalSpace(30.h),
+            verticalSpace(30),
             const StatusCircles(),
-            verticalSpace(30.h),
+            verticalSpace(30),
             GeneralHomeBody(
               body: ChatHeaders(
                 users: state.usersHaveChatWith,

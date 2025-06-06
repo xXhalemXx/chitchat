@@ -24,7 +24,7 @@ class EmailAndPassword extends StatelessWidget {
               },
               controller: getIt<AuthCubit>().loginEmailController,
             ),
-            verticalSpace(30.h),
+            verticalSpace(30),
             AppTextFormField(
               hintText: 'password',
               validator: (value) {

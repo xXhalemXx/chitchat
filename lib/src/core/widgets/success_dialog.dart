@@ -15,7 +15,11 @@ class SuccessDialog extends StatelessWidget {
         'Success',
         style: AppTextStyles.poppinsFont18Green100Medium1,
       ),
-      content: Text(message),
+      content: Text(
+        message,
+        style: AppTextStyles.poppinsFont16Black100Medium1,
+        textAlign: TextAlign.center,
+      ),
       actions: [
         AppTextButton(
             buttonText: 'ok',

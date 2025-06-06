@@ -14,7 +14,8 @@ class AddContact extends StatelessWidget {
       child: Container(
         width: 44.w,
         decoration: BoxDecoration(
-            shape: BoxShape.circle, color: AppColor.white.withOpacity(0.2)),
+            shape: BoxShape.circle,
+            color: AppColor.white.withValues(alpha: 0.2)),
         child: Center(
           child: SvgPicture.asset(
             Assets.assetsImagesSvgsNewContact,

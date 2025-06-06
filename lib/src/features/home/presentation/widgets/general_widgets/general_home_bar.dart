@@ -13,9 +13,8 @@ class GeneralAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 327.w,
-      height: 44.h,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -23,9 +22,10 @@ class GeneralAppBar extends StatelessWidget {
             onTap: onTap,
             child: Container(
               width: 44.w,
+              height: 44.h,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColor.white.withOpacity(0.2)),
+                  color: AppColor.white.withValues(alpha: 0.2)),
               child: Center(
                 child: SvgPicture.asset(
                   Assets.assetsImagesSvgsSearch,
@@ -41,6 +41,7 @@ class GeneralAppBar extends StatelessWidget {
           ),
           SizedBox(
             width: 44.w,
+            height: 44.h,
             child: rightWidget ?? const SizedBox.shrink(),
           )
         ],

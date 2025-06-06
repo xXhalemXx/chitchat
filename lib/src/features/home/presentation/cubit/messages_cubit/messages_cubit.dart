@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:chitchat/src/core/helpers/extensions.dart';
 import 'package:chitchat/src/core/models/user_data.dart';
+import 'package:chitchat/src/core/networking/network_exceptions.dart';
 import 'package:chitchat/src/features/home/data/repo/repo.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/core/routes/names.dart';
@@ -21,15 +22,19 @@ class MessagesCubit extends Cubit<MessagesState> {
   Stream<List<UserWithLastMessage>>? _chatHeaderStream;
 
   Future<dynamic> loadData() async {
-    homeRepository.updateUserLastSeen(uId: UserData.currentUser!.uId);
-    _chatHeaderStream = homeRepository.fetchUsersWithLastMessage(
-        userId: UserData.currentUser!.uId);
-    _chatHeaderStream!.listen(
-      (usersWithLastMessage) {
-        usersWithLastMessage.sortByLastMessageTime();
-        emit(state.copyWith(usersHaveChatWith: usersWithLastMessage));
-      },
-    );
+    try {
+      homeRepository.updateUserLastSeen(uId: UserData.currentUser!.uId);
+      _chatHeaderStream = homeRepository.fetchUsersWithLastMessage(
+          userId: UserData.currentUser!.uId);
+      _chatHeaderStream!.listen(
+        (usersWithLastMessage) {
+          usersWithLastMessage.sortByLastMessageTime();
+          emit(state.copyWith(usersHaveChatWith: usersWithLastMessage));
+        },
+      );
+    } catch (error) {
+      NetworkExceptions.showErrorDialog(error);
+    }
   }
 
   void autoUpdateChatHeaders() {
@@ -40,19 +45,24 @@ class MessagesCubit extends Cubit<MessagesState> {
   }
 
   Future<dynamic> searchForUser({required String searchText}) async {
-    homeRepository.updateUserLastSeen(uId: UserData.currentUser!.uId);
+    try {
+      homeRepository.updateUserLastSeen(uId: UserData.currentUser!.uId);
 
-    emit(state.copyWith(isLoading: true));
-    List<UserModel> allUsers = await homeRepository.fetchAllUsers(
-        currentUserId: UserData.currentUser!.uId);
-    List<UserModel> filteredUsers = [];
-    if (searchText.isNotEmpty) {
-      filteredUsers = allUsers
-          .where((user) =>
-              user.name.toLowerCase().contains(searchText.toLowerCase()))
-          .toList();
+      emit(state.copyWith(isLoading: true));
+      List<UserModel> allUsers = await homeRepository.fetchAllUsers(
+          currentUserId: UserData.currentUser!.uId);
+      List<UserModel> filteredUsers = [];
+      if (searchText.isNotEmpty) {
+        filteredUsers = allUsers
+            .where((user) =>
+                user.name.toLowerCase().contains(searchText.toLowerCase()))
+            .toList();
+      }
+      emit(state.copyWith(filteredUsers: filteredUsers, isLoading: false));
+    } catch (error) {
+      NetworkExceptions.showErrorDialog(error);
+      emit(state.copyWith(filteredUsers: [], isLoading: false));
     }
-    emit(state.copyWith(filteredUsers: filteredUsers, isLoading: false));
   }
 
   void navigateToChatScreen(

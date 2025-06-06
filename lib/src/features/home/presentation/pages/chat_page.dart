@@ -2,7 +2,7 @@ import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/colors.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/features/home/presentation/cubit/chat_cubit/chat_cubit.dart';
-import 'package:chitchat/src/features/home/presentation/widgets/calls/incoming_call_wrapper.dart';
+import 'package:chitchat/src/features/home/presentation/widgets/calls/incoming_call/incoming_call_wrapper.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/chat/chat_app_bar.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/chat/chat_view.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/chat/message_sender.dart';

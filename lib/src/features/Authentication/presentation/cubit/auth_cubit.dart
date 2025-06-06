@@ -1,7 +1,13 @@
-import 'package:chitchat/src/core/cached_data/cached_data.dart';
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/constants/strings.dart';
+import 'package:chitchat/src/core/helpers/extensions.dart';
+import 'package:chitchat/src/core/helpers/shared_pref_helper.dart';
 import 'package:chitchat/src/core/models/user_data.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
+import 'package:chitchat/src/core/networking/network_exceptions.dart';
 import 'package:chitchat/src/core/routes/routes.dart';
 import 'package:chitchat/src/core/widgets/success_dialog.dart';
 import 'package:chitchat/src/features/Authentication/data/repo/repo.dart';
@@ -49,41 +55,72 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   //** authentication logic */
-  Future<void> signInWithGoogle({required BuildContext context}) async {
+  Future<void> signInWithGoogle() async {
     emit(AuthLoading());
-    UserModel? user = await authRepository.signInWithGoogle();
-    if (context.mounted && user != null) {
-      _saveUserModelAndNavigate(user: user, context: context);
-    }
-    emit(AuthLoaded());
-  }
-
-  Future<void> loginWithEmailAndPassword(
-      {required BuildContext context}) async {
-    if (getIt<AuthCubit>().loginFormKey.currentState!.validate()) {
-      emit(AuthLoading());
-      UserModel user = await authRepository.loginWithEmailAndPassword(
-        email: loginEmailController.text,
-        password: loginPasswordController.text,
-      );
-      if (context.mounted) {
-        _saveUserModelAndNavigate(user: user, context: context);
+    try {
+      UserModel? user = await authRepository.signInWithGoogle();
+      if (user != null) {
+        await _saveUserModelAndNavigate(user: user);
       }
+      emit(AuthLoaded());
+    } catch (error) {
+      NetworkExceptions.showErrorDialog(error);
       emit(AuthLoaded());
     }
   }
 
+  Future<void> loginWithEmailAndPassword() async {
+    if (getIt<AuthCubit>().loginFormKey.currentState!.validate()) {
+      emit(AuthLoading());
+      try {
+        UserModel user = await authRepository.loginWithEmailAndPassword(
+          email: loginEmailController.text,
+          password: loginPasswordController.text,
+        );
+
+        await _saveUserModelAndNavigate(user: user);
+        emit(AuthLoaded());
+      } catch (error) {
+        NetworkExceptions.showErrorDialog(error);
+        emit(AuthLoaded());
+      }
+    }
+  }
+
+  Future<bool> checkIfUserDataSaved() async {
+    try {
+      String? userData = await SharedPrefHelper.getSecuredString(
+          key: SharedPrefStrings.userData);
+      if (userData.isNotNullOrEmpty()) {
+        UserModel userModel = UserModel.fromJson(jsonDecode(userData!));
+        await _saveUserModelAndNavigate(
+          loggedInUsingID: true,
+          user: userModel,
+        );
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      log(error.toString());
+      return false;
+    }
+  }
+
   _saveUserModelAndNavigate(
-      {required UserModel user, required BuildContext context}) {
-    // save user details in cache
-    getIt<CacheData>().setString(key: 'UID', value: user.uId);
+      {required UserModel user, bool loggedInUsingID = false}) async {
     // save user details in global class
     UserData.currentUser = user;
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      RoutesName.dashboard,
-      (Route<dynamic> route) => false,
-    );
+    if (!loggedInUsingID) {
+      //save user data in secure storage
+      await SharedPrefHelper.setSecuredString(
+          key: SharedPrefStrings.userData, value: jsonEncode(user.toJson()));
+      Navigator.pushNamedAndRemoveUntil(
+        AppRouter.navigatorKey.currentContext!,
+        RoutesName.dashboard,
+        (Route<dynamic> route) => false,
+      );
+    }
     authRepository.updateUserLastSeen(uId: user.uId);
   }
 
@@ -92,22 +129,26 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     if (getIt<AuthCubit>().signUpFormKey.currentState!.validate()) {
       emit(AuthLoading());
-
-      await authRepository.registerWithEmailAndPassword(
-        email: signUpEmailController.text,
-        password: signUpPasswordController.text,
-        name: signUpNameController.text,
-      );
-
-      if (context.mounted) {
-        showDialog(
-          context: context,
-          builder: (_) =>
-              const SuccessDialog(message: 'Your account created successfully'),
+      try {
+        await authRepository.registerWithEmailAndPassword(
+          email: signUpEmailController.text,
+          password: signUpPasswordController.text,
+          name: signUpNameController.text,
         );
-      }
 
-      emit(AuthLoaded());
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            builder: (_) => const SuccessDialog(
+                message: 'Your account created successfully'),
+          );
+        }
+
+        emit(AuthLoaded());
+      } catch (error) {
+        NetworkExceptions.showErrorDialog(error);
+        emit(AuthLoaded());
+      }
     }
   }
 }

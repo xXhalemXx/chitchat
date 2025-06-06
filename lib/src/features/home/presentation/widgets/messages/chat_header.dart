@@ -20,6 +20,7 @@ class ChatHeaders extends StatelessWidget {
     return users.isEmpty
         ? _noChatsYet()
         : ListView.builder(
+            padding: EdgeInsets.zero,
             itemCount: users.length,
             itemBuilder: (context, index) {
               return _chatEntity(
@@ -70,11 +71,11 @@ class ChatHeaders extends StatelessWidget {
                 _avatarImage(
                     userPhoto: userWithLastMessage.user.photo,
                     lastActivity: userWithLastMessage.user.lastActivity),
-                horizontalSpace(12.w),
+                horizontalSpace(12),
                 _avatarNameAndLastMessage(
                     name: userWithLastMessage.user.name,
                     lastMessage: userWithLastMessage.lastMessage),
-                const Spacer(),
+                // const Spacer(),
                 _timeAndUnreadMessage(
                     unreadMessages: userWithLastMessage.unreadCount,
                     dateAndTime: userWithLastMessage.user.lastActivity),
@@ -95,8 +96,8 @@ class ChatHeaders extends StatelessWidget {
           size: 52,
         ),
         Positioned(
-          bottom: 3.h,
-          right: 3.w,
+          bottom: 2.h,
+          right: 4.w,
           child: Container(
             width: 10.w,
             height: 10.h,
@@ -114,20 +115,24 @@ class ChatHeaders extends StatelessWidget {
 
   Widget _avatarNameAndLastMessage(
       {required String name, required String lastMessage}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          name,
-          style: AppTextStyles.poppinsFont20Black100Medium1,
-        ),
-        verticalSpace(6.h),
-        Text(
-          lastMessage,
-          style: AppTextStyles.poppinsFont12Gray50Regular1,
-        )
-      ],
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            name,
+            style: AppTextStyles.poppinsFont20Black100Medium1,
+            overflow: TextOverflow.clip,
+          ),
+          verticalSpace(6),
+          Text(
+            lastMessage,
+            style: AppTextStyles.poppinsFont12Gray50Regular1,
+            overflow: TextOverflow.ellipsis,
+          )
+        ],
+      ),
     );
   }
 
@@ -141,7 +146,7 @@ class ChatHeaders extends StatelessWidget {
           getIt<MessagesCubit>().getTimeDifference(dateAndTime: dateAndTime),
           style: AppTextStyles.poppinsFont12Gray50Light1,
         ),
-        verticalSpace(9.h),
+        verticalSpace(9),
         unreadMessages == 0
             ? const SizedBox.shrink()
             : Container(
@@ -167,14 +172,14 @@ class ChatHeaders extends StatelessWidget {
       extentRatio: 0.35,
       motion: const ScrollMotion(),
       children: [
-        horizontalSpace(16.w),
+        horizontalSpace(16),
         _actionPaneButton(
             onTap: () {
               // print('tap bill');
             },
             svgName: Assets.assetsImagesSvgsBill,
             backgroundColor: AppColor.black),
-        horizontalSpace(16.w),
+        horizontalSpace(16),
         _actionPaneButton(
             onTap: () {
               // print('tap delete');

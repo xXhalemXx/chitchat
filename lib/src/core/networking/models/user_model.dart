@@ -6,7 +6,6 @@ class UserModel {
   final String photo;
   final String bio;
   final String lastActivity;
-  final List callsHistory;
 
   UserModel({
     required this.email,
@@ -16,7 +15,6 @@ class UserModel {
     required this.photo,
     required this.bio,
     required this.lastActivity,
-    required this.callsHistory,
   });
 
   static UserModel fromJson(Map<String, dynamic> jason) {
@@ -28,11 +26,30 @@ class UserModel {
       photo: jason['photo'],
       bio: jason['bio'],
       lastActivity: jason['lastActivity'],
-      callsHistory: jason['callsHistory'],
     );
   }
 
-  Map<String, dynamic> toMap() => {
+  copyWith({
+    String? name,
+    String? phone,
+    String? email,
+    String? uId,
+    String? photo,
+    String? bio,
+    String? lastActivity,
+  }) {
+    return UserModel(
+      name: name ?? this.name,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      uId: uId ?? this.uId,
+      photo: photo ?? this.photo,
+      bio: bio ?? this.bio,
+      lastActivity: lastActivity ?? this.lastActivity,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
         'name': name,
         'phone': phone,
         'email': email,
@@ -40,6 +57,5 @@ class UserModel {
         'photo': photo,
         'bio': bio,
         'lastActivity': lastActivity,
-        'callsHistory': callsHistory,
       };
 }

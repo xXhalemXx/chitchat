@@ -94,6 +94,10 @@ class Assets {
   /// assets/images/splash_icon_android_12.png
   static const String assetsImagesSplashIconAndroid12 = "assets/images/splash_icon_android_12.png";
 
+  /// Assets for assetsImagesSvgsAbout
+  /// assets/images/svgs/about.svg
+  static const String assetsImagesSvgsAbout = "assets/images/svgs/about.svg";
+
   /// Assets for assetsImagesSvgsAddNewStory
   /// assets/images/svgs/add_new_story.svg
   static const String assetsImagesSvgsAddNewStory = "assets/images/svgs/add_new_story.svg";
@@ -122,10 +126,6 @@ class Assets {
   /// assets/images/svgs/camera.svg
   static const String assetsImagesSvgsCamera = "assets/images/svgs/camera.svg";
 
-  /// Assets for assetsImagesSvgsCommingCall
-  /// assets/images/svgs/comming_call.svg
-  static const String assetsImagesSvgsCommingCall = "assets/images/svgs/comming_call.svg";
-
   /// Assets for assetsImagesSvgsContacts
   /// assets/images/svgs/contacts.svg
   static const String assetsImagesSvgsContacts = "assets/images/svgs/contacts.svg";
@@ -134,9 +134,17 @@ class Assets {
   /// assets/images/svgs/data.svg
   static const String assetsImagesSvgsData = "assets/images/svgs/data.svg";
 
+  /// Assets for assetsImagesSvgsDelete
+  /// assets/images/svgs/delete.svg
+  static const String assetsImagesSvgsDelete = "assets/images/svgs/delete.svg";
+
   /// Assets for assetsImagesSvgsFacebook
   /// assets/images/svgs/facebook.svg
   static const String assetsImagesSvgsFacebook = "assets/images/svgs/facebook.svg";
+
+  /// Assets for assetsImagesSvgsGallery
+  /// assets/images/svgs/gallery.svg
+  static const String assetsImagesSvgsGallery = "assets/images/svgs/gallery.svg";
 
   /// Assets for assetsImagesSvgsGoogle
   /// assets/images/svgs/google.svg
@@ -145,6 +153,10 @@ class Assets {
   /// Assets for assetsImagesSvgsHelp
   /// assets/images/svgs/help.svg
   static const String assetsImagesSvgsHelp = "assets/images/svgs/help.svg";
+
+  /// Assets for assetsImagesSvgsIncomingCall
+  /// assets/images/svgs/incoming_call.svg
+  static const String assetsImagesSvgsIncomingCall = "assets/images/svgs/incoming_call.svg";
 
   /// Assets for assetsImagesSvgsKey
   /// assets/images/svgs/key.svg
@@ -198,6 +210,10 @@ class Assets {
   /// assets/images/svgs/trash.svg
   static const String assetsImagesSvgsTrash = "assets/images/svgs/trash.svg";
 
+  /// Assets for assetsImagesSvgsUser
+  /// assets/images/svgs/user.svg
+  static const String assetsImagesSvgsUser = "assets/images/svgs/user.svg";
+
   /// Assets for assetsImagesSvgsUsers
   /// assets/images/svgs/users.svg
   static const String assetsImagesSvgsUsers = "assets/images/svgs/users.svg";
@@ -205,5 +221,13 @@ class Assets {
   /// Assets for assetsImagesSvgsVideoCall
   /// assets/images/svgs/video_call.svg
   static const String assetsImagesSvgsVideoCall = "assets/images/svgs/video_call.svg";
+
+  /// Assets for assetsMp3IncomingCall
+  /// assets/mp3/incomingCall.mp3
+  static const String assetsMp3IncomingCall = "assets/mp3/incomingCall.mp3";
+
+  /// Assets for assetsMp3OutgoingCall
+  /// assets/mp3/outgoingCall.mp3
+  static const String assetsMp3OutgoingCall = "assets/mp3/outgoingCall.mp3";
 }
 

@@ -1,20 +1,29 @@
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:chitchat/src/core/constants/strings.dart';
 import 'package:chitchat/src/core/networking/models/call_history_model.dart';
 import 'package:chitchat/src/core/networking/models/ice_candidate_model.dart';
+import 'package:chitchat/src/core/networking/models/user_call_model.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/features/home/data/models/message_model.dart';
 import 'package:chitchat/src/features/home/data/models/user_with_last_message_model.dart';
 import 'package:chitchat/src/core/networking/sources/sources.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as sp;
 
 class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
-  HomeRemoteDataSourceFirebase({required this.firebaseFirestore});
+  late final CollectionReference _signalingRef;
+
+  HomeRemoteDataSourceFirebase({required this.firebaseFirestore}) {
+    firebaseFirestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+    );
+    _signalingRef = firebaseFirestore.collection(FirebaseStrings.signaling);
+  }
 
 //** aut cubit function */
   @override
@@ -34,13 +43,17 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
       idToken: googleAuth.idToken,
     );
     // Sign in with the credential
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    final UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    // Get ID token result
+    final IdTokenResult? idTokenResult =
+        await userCredential.user?.getIdTokenResult();
     // access fire store to see if user exists or not
     DocumentSnapshot<Map<String, dynamic>> doc = await firebaseFirestore
         .collection(FirebaseStrings.users)
         .doc(FirebaseAuth.instance.currentUser?.uid ?? '')
         .get();
-    if (doc.exists) {
+    if (doc.exists && idTokenResult != null) {
       return UserModel(
         email: doc[FirebaseStrings.email],
         phone: doc[FirebaseStrings.phone],
@@ -49,7 +62,6 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
         photo: doc[FirebaseStrings.photo],
         bio: doc[FirebaseStrings.bio],
         lastActivity: doc[FirebaseStrings.lastActivity],
-        callsHistory: doc[FirebaseStrings.callsHistory],
       );
     } else {
       //convert firebase user to User model
@@ -77,7 +89,6 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
         .collection(FirebaseStrings.users)
         .doc(credential.user?.uid ?? '')
         .get();
-
     return UserModel(
       email: email,
       phone: doc[FirebaseStrings.phone],
@@ -86,7 +97,6 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
       photo: doc[FirebaseStrings.photo],
       bio: doc[FirebaseStrings.bio],
       lastActivity: doc[FirebaseStrings.lastActivity],
-      callsHistory: doc[FirebaseStrings.callsHistory],
     );
   }
 
@@ -108,7 +118,6 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
       uId: userCredential.user!.uid,
       photo: '',
       bio: '',
-      callsHistory: [],
       lastActivity: DateTime.now().toString(),
     );
     // save user in Firestore
@@ -123,17 +132,17 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
 
 // to save user data in firestore
   Future<void> _saveUserInFireStore({
-    required var user,
+    required UserModel user,
   }) async {
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+    DocumentSnapshot documentSnapshot = await firebaseFirestore
         .collection(FirebaseStrings.users)
         .doc(user.uId)
         .get();
     if (!documentSnapshot.exists) {
-      await FirebaseFirestore.instance
+      await firebaseFirestore
           .collection(FirebaseStrings.users)
           .doc(user.uId)
-          .set(user.toMap());
+          .set(user.toJson());
     }
   }
 
@@ -146,7 +155,6 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
       uId: user?.uid ?? '',
       photo: '',
       bio: '',
-      callsHistory: [],
       lastActivity: DateTime.now().toString(),
     );
   }
@@ -291,7 +299,7 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
         receiver: receiver.uId);
 
     // save massage in sender document
-    FirebaseFirestore.instance
+    await firebaseFirestore
         .collection(FirebaseStrings.users)
         .doc(userId)
         .collection(FirebaseStrings.chats)
@@ -300,7 +308,7 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
         .add(message.toMap());
     // save massage in receiver document
 
-    FirebaseFirestore.instance
+    await firebaseFirestore
         .collection(FirebaseStrings.users)
         .doc(receiver.uId)
         .collection(FirebaseStrings.chats)
@@ -308,7 +316,7 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
         .collection(FirebaseStrings.messages)
         .add(message.toMap());
 // just a value added to document to be active
-    FirebaseFirestore.instance
+    await firebaseFirestore
         .collection(FirebaseStrings.users)
         .doc(userId)
         .collection(FirebaseStrings.chats)
@@ -316,7 +324,7 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
         .set({FirebaseStrings.exists: ''});
 // just a value added to document to be active
 
-    FirebaseFirestore.instance
+    await firebaseFirestore
         .collection(FirebaseStrings.users)
         .doc(receiver.uId)
         .collection(FirebaseStrings.chats)
@@ -385,21 +393,23 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
   //**end of home cubit function */
 
   //** call cubit function */
-  final CollectionReference _signalingRef =
-      FirebaseFirestore.instance.collection(FirebaseStrings.signaling);
-  @override
-  Future<String> createCall(
-      String callerId, String receiverId, String calleeName) async {
-    DocumentReference callDoc = _signalingRef.doc();
 
+  @override
+
+  /// to create document in singling collection this doc used
+  /// to mange call between caller and receiver
+  Future<String> createCall(
+      UserCallModel callerData, String receiverId, String callType) async {
+    DocumentReference callDoc = _signalingRef.doc();
     await callDoc.set({
-      FirebaseStrings.callerId: callerId,
+      FirebaseStrings.callerData: callerData.toJson(),
       FirebaseStrings.receiverId: receiverId,
       FirebaseStrings.callStatus: 0,
       FirebaseStrings.offer: null,
       FirebaseStrings.answer: null,
       FirebaseStrings.iceCandidates: [],
       FirebaseStrings.callId: callDoc.id,
+      FirebaseStrings.callType: callType,
     });
     return callDoc.id;
   }
@@ -461,8 +471,10 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
         .snapshots()
         .map((snapshot) {
           for (var doc in snapshot.docChanges) {
-            if (doc.type == DocumentChangeType.added) {
-              return doc.doc.data();
+            Map<String, dynamic>? callData =
+                doc.doc.data() as Map<String, dynamic>?;
+            if (callData != null && callData[FirebaseStrings.offer] != null) {
+              return callData;
             }
           }
           return null;
@@ -472,28 +484,119 @@ class HomeRemoteDataSourceFirebase implements HomeRemoteDataSource {
   }
 
   /// this function is called when the call is ended
-  /// it updates the call history of both users
-  /// and deletes the call signaling document
   @override
   Future<void> onCallEnd(
-      String callId, String callerId, CallHistoryModel callData) async {
-    // update the call history of the caller
-    await FirebaseFirestore.instance
-        .collection(FirebaseStrings.users)
-        .doc(callerId)
-        .update({
-      FirebaseStrings.callsHistory: FieldValue.arrayUnion([callData.toJson()])
-    });
-    String receiverId = callData.idOfOtherUser;
-    callData.idOfOtherUser = callerId;
-    // update the call history of the receiver
-    await FirebaseFirestore.instance
-        .collection(FirebaseStrings.users)
-        .doc(receiverId)
-        .update({
-      FirebaseStrings.callsHistory: FieldValue.arrayUnion([callData.toJson()])
-    });
+    String callId,
+  ) async {
     await _signalingRef.doc(callId).delete();
   }
+
+  @override
+  Stream<bool?> onCallDeleted(String callId) {
+    return _signalingRef
+        .doc(callId)
+        .snapshots()
+        .map((snapshot) {
+          if (!snapshot.exists) {
+            // Document has been deleted
+            return true;
+          }
+        })
+        .where((data) => data == true)
+        .map((boolVal) => boolVal);
+  }
+
+  @override
+  Future<void> addCallToUserHistory(
+      {required String userID, required CallHistoryModel callData}) async {
+    DocumentReference documentReference = FirebaseFirestore.instance
+        .collection(FirebaseStrings.users)
+        .doc(userID)
+        .collection(FirebaseStrings.callsHistory)
+        .doc(FirebaseStrings.allCalls);
+
+    DocumentSnapshot documentSnapshot = await documentReference.get();
+    if (!documentSnapshot.exists) {
+      // set new filed
+      await documentReference.set({FirebaseStrings.callsHistory: []});
+      // update the call history of the caller
+      await documentReference.update({
+        FirebaseStrings.callsHistory: FieldValue.arrayUnion([callData.toJson()])
+      });
+    } else {
+      // update the call history of the caller
+      await documentReference.update({
+        FirebaseStrings.callsHistory: FieldValue.arrayUnion([callData.toJson()])
+      });
+    }
+  }
+
   //**end of call cubit function */
+  @override
+  Future<List<CallHistoryModel>> getCallsHistory(
+      {required String userID}) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection(FirebaseStrings.users)
+        .doc(userID)
+        .collection(FirebaseStrings.callsHistory)
+        .doc(FirebaseStrings.allCalls)
+        .get();
+    if (documentSnapshot.exists) {
+      List<dynamic> calls =
+          documentSnapshot.get(FirebaseStrings.callsHistory) ?? [];
+      return calls
+          .map((e) => CallHistoryModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
+  }
+
+  /// This function upload user photo in firebase Storage and get the link.
+  /// this is the only function depend on supabase because firebase storage
+  /// is paid no longer free.
+  @override
+  Future<String> uploadUserPhoto(
+      {required File image, required String fileName}) async {
+    final supabase = sp.Supabase.instance.client;
+    // Upload the new file
+    await supabase.storage.from('profile-pictures').upload(fileName, image);
+    // Get the public URL of the uploaded file
+    return supabase.storage.from('profile-pictures').getPublicUrl(fileName);
+  }
+
+  /// this function updates the user's name in Firestore.
+  @override
+  Future<void> updateUserName({
+    required String userId,
+    required String name,
+  }) async {
+    await firebaseFirestore
+        .collection(FirebaseStrings.users)
+        .doc(userId)
+        .update({FirebaseStrings.name: name});
+  }
+
+  /// This function updates the user's photo URL in Firestore.
+  @override
+  Future<void> updateUserPhoto({
+    required String userId,
+    required String photoUrl,
+  }) async {
+    await firebaseFirestore
+        .collection(FirebaseStrings.users)
+        .doc(userId)
+        .update({FirebaseStrings.photo: photoUrl});
+  }
+
+  /// this function updates the user's bio in Firestore.
+  @override
+  Future<void> updateUserBio({
+    required String userId,
+    required String bio,
+  }) async {
+    await firebaseFirestore
+        .collection(FirebaseStrings.users)
+        .doc(userId)
+        .update({FirebaseStrings.bio: bio});
+  }
 }

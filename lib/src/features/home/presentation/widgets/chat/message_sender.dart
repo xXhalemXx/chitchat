@@ -18,7 +18,7 @@ class MessageSender extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 56,
+      height: 56.h,
       child: Row(
         children: [
           horizontalSpace(24),
@@ -43,7 +43,7 @@ class MessageSender extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.send,
-              color: AppColor.black.withOpacity(0.4),
+              color: AppColor.black.withValues(alpha: 0.4),
             ), // Use an icon for the send button
             onPressed: () {
               getIt<ChatCubit>().sendMessage(

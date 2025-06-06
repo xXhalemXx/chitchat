@@ -3,7 +3,6 @@ import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/
 import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/general_home_body.dart';
 import 'package:chitchat/src/features/home/presentation/widgets/settings/settings_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -12,13 +11,13 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        verticalSpace(60.h),
+        verticalSpace(60),
         GeneralAppBar(
           title: 'Settings',
           onTap: () {},
         ),
-        verticalSpace(30.h),
-        const GeneralHomeBody(
+        verticalSpace(30),
+        GeneralHomeBody(
           body: SettingsList(),
         ),
       ],

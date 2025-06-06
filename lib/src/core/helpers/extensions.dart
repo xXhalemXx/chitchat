@@ -2,6 +2,7 @@ import 'package:chitchat/src/features/home/data/models/user_with_last_message_mo
 
 extension StringExtension on String? {
   bool isNullOrEmpty() => this == null || this == "";
+  bool isNotNullOrEmpty() => this != null && this != "";
 }
 
 extension ListExtension<T> on List<T>? {

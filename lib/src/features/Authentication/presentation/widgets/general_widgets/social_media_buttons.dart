@@ -14,34 +14,28 @@ class SocialMediaButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: leftPadding ?? 0.w),
-      child: SizedBox(
-        height: 48.h,
-        width: 185.w,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            socialElement(
-                svgName: Assets.assetsImagesSvgsFacebook,
-                onTap: () {
-                  comingSoonSnakeBar(context, 'facebook');
-                }),
-            socialElement(
-                svgName: Assets.assetsImagesSvgsGoogle,
-                onTap: () {
-                  getIt<AuthCubit>().signInWithGoogle(context: context);
-                }),
-            socialElement(
-                svgName: backgroundColor == AppColor.white
-                    ? Assets.assetsImagesSvgsAppleBlack
-                    : Assets.assetsImagesSvgsApple,
-                onTap: () {
-                  comingSoonSnakeBar(context, 'apple');
-                }),
-          ],
-        ),
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 35.w,
+      children: [
+        socialElement(
+            svgName: Assets.assetsImagesSvgsFacebook,
+            onTap: () {
+              comingSoonSnakeBar(context, 'facebook');
+            }),
+        socialElement(
+            svgName: Assets.assetsImagesSvgsGoogle,
+            onTap: () {
+              getIt<AuthCubit>().signInWithGoogle();
+            }),
+        socialElement(
+            svgName: backgroundColor == AppColor.white
+                ? Assets.assetsImagesSvgsAppleBlack
+                : Assets.assetsImagesSvgsApple,
+            onTap: () {
+              comingSoonSnakeBar(context, 'apple');
+            }),
+      ],
     );
   }
 

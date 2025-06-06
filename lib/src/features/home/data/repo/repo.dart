@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:chitchat/src/core/networking/models/call_history_model.dart';
 import 'package:chitchat/src/core/networking/models/ice_candidate_model.dart';
+import 'package:chitchat/src/core/networking/models/user_call_model.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
 import 'package:chitchat/src/features/home/data/models/message_model.dart';
 import 'package:chitchat/src/features/home/data/models/user_with_last_message_model.dart';
@@ -48,8 +51,8 @@ class HomeRepository {
   }
 
   Future<String> createCall(
-      String callerId, String receiverId, String calleeName) async {
-    return await remoteDataSource.createCall(callerId, receiverId, calleeName);
+      UserCallModel callerData, String receiverId, String callType) async {
+    return await remoteDataSource.createCall(callerData, receiverId, callType);
   }
 
   Future<void> sendOffer(String callId, Map<String, dynamic> offer) async {
@@ -78,11 +81,55 @@ class HomeRepository {
   }
 
   Future<void> onCallEnd(
-      String callId, String callerId, CallHistoryModel callData) async {
-    await remoteDataSource.onCallEnd(callId, callerId, callData);
+    String callId,
+  ) async {
+    await remoteDataSource.onCallEnd(
+      callId,
+    );
+  }
+
+  Future<void> addCallToUserHistory(
+      {required String userID, required CallHistoryModel callData}) async {
+    await remoteDataSource.addCallToUserHistory(
+        userID: userID, callData: callData);
   }
 
   Future<void> updateCallStatus(String callId, int callStatus) async {
     await remoteDataSource.updateCallStatus(callId, callStatus);
+  }
+
+  Stream<bool?> onCallDeleted(String callId) {
+    return remoteDataSource.onCallDeleted(callId);
+  }
+
+  Future<List<CallHistoryModel>> getCallsHistory({required String userID}) {
+    return remoteDataSource.getCallsHistory(userID: userID);
+  }
+
+  Future<String> uploadUserPhoto(
+      {required File image, required String fileName}) async {
+    return await remoteDataSource.uploadUserPhoto(
+        image: image, fileName: fileName);
+  }
+
+  Future<void> updateUserBio({
+    required String userId,
+    required String bio,
+  }) async {
+    await remoteDataSource.updateUserBio(userId: userId, bio: bio);
+  }
+
+  Future<void> updateUserPhoto({
+    required String userId,
+    required String photoUrl,
+  }) async {
+    await remoteDataSource.updateUserPhoto(userId: userId, photoUrl: photoUrl);
+  }
+
+  Future<void> updateUserName({
+    required String userId,
+    required String name,
+  }) async {
+    await remoteDataSource.updateUserName(userId: userId, name: name);
   }
 }

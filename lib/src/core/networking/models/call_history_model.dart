@@ -1,6 +1,8 @@
+import 'package:chitchat/src/core/networking/models/user_call_model.dart';
+
 class CallHistoryModel {
-  String idOfOtherUser;
-  DateTime callTime;
+  UserCallModel userData;
+  String callTime;
 
   /// call status can be 5 values
   /// 0: call is initiated
@@ -9,23 +11,31 @@ class CallHistoryModel {
   /// 3: user in not answering
   /// 4: user in another call
   int callStatus;
+  String callType;
+  bool incoming;
 
   CallHistoryModel({
-    required this.idOfOtherUser,
+    required this.userData,
     required this.callTime,
     required this.callStatus,
+    required this.callType,
+    required this.incoming,
   });
 
   CallHistoryModel.fromJson(Map<String, dynamic> json)
-      : idOfOtherUser = json['idOfOtherUser'],
-        callTime = DateTime.parse(json['callTime']),
+      : userData = UserCallModel.fromJson(json['userData']),
+        callTime = json['callTime'],
+        callType = json['callType'],
+        incoming = json['incoming'],
         callStatus = json['callStatus'];
 
   Map<String, dynamic> toJson() {
     return {
-      'idOfOtherUser': idOfOtherUser,
+      'userData': userData.toJson(),
       'callTime': callTime,
       'callStatus': callStatus,
+      'callType': callType,
+      'incoming': incoming,
     };
   }
 }

@@ -1,10 +1,12 @@
-import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/config/injection.dart';
 import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
-import 'package:chitchat/src/core/routes/names.dart';
-import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
+import 'package:chitchat/src/core/models/user_data.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/settings_cubit/settings_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/user_circle_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -16,11 +18,14 @@ class SettingsList extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _accountDetails(),
+          BlocBuilder<SettingsCubit, SettingsState>(
+            builder: (context, state) {
+              return _accountDetails(context);
+            },
+          ),
           Divider(
             color: AppColor.moreLightGray,
           ),
-          verticalSpace(25.h),
           _settingsItem(
               title: 'Account',
               svgName: Assets.assetsImagesSvgsKey,
@@ -46,62 +51,54 @@ class SettingsList extends StatelessWidget {
               svgName: Assets.assetsImagesSvgsData,
               description: 'Network usage, storage usage',
               onTap: () {}),
-          // _settingsItem(
-          //   title: 'Invite a friend',
-          //   svgName: 'users',
-          //   onTap: () {
-          //     // reset all singleton data
-          //     getIt.resetLazySingleton<AuthCubit>();
-          //     Navigator.pushNamedAndRemoveUntil(
-          //       context,
-          //       RoutesName.onboarding,
-          //       (Route<dynamic> route) => false,
-          //     );
-          //   },
-          // ),
         ],
       ),
     );
   }
 
-  _accountDetails() {
-    return Padding(
-      padding: EdgeInsets.only(left: 24.0.w, bottom: 20.h, right: 24.w),
-      child: Row(children: [
-        _avatarImage(),
-        horizontalSpace(12.w),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Nazrul Islam',
-                style: AppTextStyles.poppinsFont20Black100Bold1),
-            verticalSpace(9.h),
-            Text('Never give up 💪',
-                style: AppTextStyles.poppinsFont12Gray100Light1),
-          ],
-        ),
-        const Spacer(),
-        SizedBox(
-          width: 24.w,
-          height: 24.h,
-          child: SvgPicture.asset(Assets.assetsImagesSvgsQrCode),
-        )
-      ]),
-    );
-  }
-
-  Widget _avatarImage() {
-    return Stack(
-      children: [
-        Container(
-          width: 60.w,
-          height: 60.h,
-          decoration: const BoxDecoration(shape: BoxShape.circle),
-          child: CircleAvatar(
-            child: Image.asset('assets/images/person_1.png'),
+  Widget _accountDetails(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        getIt<SettingsCubit>().navigateToProfileInfo(context);
+      },
+      child: Padding(
+        padding: EdgeInsets.only(left: 16.0.w, bottom: 10.h, right: 24.w),
+        child: Row(children: [
+          UserCircleAvatar(
+            size: 60,
+            userPhoto: UserData.currentUser?.photo,
           ),
-        ),
-      ],
+          horizontalSpace(12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  UserData.currentUser?.name ?? '',
+                  style: AppTextStyles.poppinsFont20Black100Bold1,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                verticalSpace(9),
+                Text(
+                  UserData.currentUser?.bio == null ||
+                          UserData.currentUser?.bio == ''
+                      ? 'tap to set status'
+                      : UserData.currentUser!.bio,
+                  maxLines: 1,
+                  style: AppTextStyles.poppinsFont12Gray100Light1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 24.w,
+            height: 24.h,
+            child: SvgPicture.asset(Assets.assetsImagesSvgsQrCode),
+          )
+        ]),
+      ),
     );
   }
 
@@ -129,14 +126,16 @@ class SettingsList extends StatelessWidget {
                   height: 24.h,
                   child: SvgPicture.asset(
                     svgName,
+                    colorFilter: ColorFilter.mode(
+                        AppColor.gray.withAlpha(150), BlendMode.srcIn),
                   ),
                 ),
               ),
             ),
-            horizontalSpace(12.w),
+            horizontalSpace(12),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(title, style: AppTextStyles.poppinsFont16Black100Medium1),
-              verticalSpace(5.h),
+              verticalSpace(5),
               description == null
                   ? const SizedBox.shrink()
                   : Text(description,

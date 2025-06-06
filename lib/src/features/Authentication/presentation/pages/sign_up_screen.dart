@@ -27,13 +27,13 @@ class SignUpScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  verticalSpace(30.h),
+                  verticalSpace(30),
                   const SignUpHeaderText(),
-                  verticalSpace(60.h),
+                  verticalSpace(50),
                   const NameEmailAndPassword(),
-                  verticalSpace(120.h),
+                  verticalSpace(100),
                   const CreateAccountButton(),
-                  verticalSpace(30.h),
+                  verticalSpace(30),
                 ],
               ),
             ),

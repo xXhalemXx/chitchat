@@ -12,7 +12,7 @@ class LoginHeader extends StatelessWidget {
       children: [
         Text('Login to ChitChat',
             style: AppTextStyles.poppinsFont18DarkBlue100Bold1),
-        verticalSpace(20.h),
+        verticalSpace(20),
         Align(
           alignment: Alignment.center,
           child: SizedBox(

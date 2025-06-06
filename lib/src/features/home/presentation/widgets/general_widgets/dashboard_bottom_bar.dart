@@ -46,7 +46,7 @@ class DashboardBottomBar extends StatelessWidget {
           currentIndex: state.currentIndex,
           type: BottomNavigationBarType.fixed,
           onTap: (index) {
-            getIt<DashboardCubit>().changePage(index);
+            getIt<DashboardCubit>().navBarChangePage(index);
           },
         );
       },

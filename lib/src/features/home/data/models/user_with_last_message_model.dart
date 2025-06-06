@@ -24,7 +24,7 @@ class UserWithLastMessage {
 
   toJson() {
     return {
-      'user': user.toMap(),
+      'user': user.toJson(),
       'lastMessage': lastMessage,
       'lastMessageTime': lastMessageTime.toIso8601String(),
       'unreadMessageCount': unreadCount,
