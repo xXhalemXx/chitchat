@@ -16,9 +16,9 @@ class GeneralHomeBody extends StatelessWidget {
         decoration: _boxDecorationFun(),
         child: Column(
           children: [
-            verticalSpace(14.h),
+            verticalSpace(14),
             _grayBar(),
-            verticalSpace(14.h),
+            verticalSpace(14),
             _optionalHeader(),
             Expanded(
               child: body,
@@ -43,7 +43,7 @@ class GeneralHomeBody extends StatelessWidget {
       height: 3.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100.r),
-        color: AppColor.lighterGray,
+        color: AppColor.lightestGray,
       ),
     );
   }
@@ -61,7 +61,7 @@ class GeneralHomeBody extends StatelessWidget {
                     header!,
                     style: AppTextStyles.poppinsFont16Black100Medium1,
                   ),
-            header == null ? const SizedBox.shrink() : verticalSpace(10.h),
+            header == null ? const SizedBox.shrink() : verticalSpace(10),
           ],
         ),
       ),

@@ -11,7 +11,6 @@ import 'package:chitchat/src/features/Authentication/presentation/widgets/login_
 import 'package:chitchat/src/features/Authentication/presentation/widgets/login_widgets/login_header.dart';
 import 'package:chitchat/src/features/Authentication/presentation/widgets/general_widgets/social_media_buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -28,21 +27,21 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                verticalSpace(60.h),
+                verticalSpace(30),
                 const LoginHeader(),
-                verticalSpace(30.h),
+                verticalSpace(25),
                 SocialMediaButtons(backgroundColor: AppColor.white),
-                verticalSpace(30.h),
+                verticalSpace(30),
                 OrWithLines(
                   textStyle: AppTextStyles.poppinsFont14Gray100Black1,
                 ),
-                verticalSpace(30.h),
+                verticalSpace(30),
                 const EmailAndPassword(),
-                verticalSpace(170.h),
+                verticalSpace(170),
                 const LoginButton(),
-                verticalSpace(15.h),
+                verticalSpace(15),
                 const ForgotPassword(),
-                verticalSpace(20.h),
+                verticalSpace(20),
               ],
             ),
           ),

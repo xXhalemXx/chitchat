@@ -1,5 +1,4 @@
 import 'package:chitchat/src/core/app_style/app_theme.dart';
-import 'package:chitchat/src/core/routes/names.dart';
 import 'package:chitchat/src/core/routes/router.dart';
 
 import 'src/core/config/config.dart';
@@ -7,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key});
+  const RootApp({super.key, required this.initialRoute});
+  final String initialRoute;
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +17,11 @@ class RootApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (_, ch) => DismissKeyboard(
         child: MaterialApp(
+          navigatorKey: AppRouter.navigatorKey,
           theme: lightTheme,
           debugShowCheckedModeBanner: false,
-          initialRoute: RoutesName.initial,
-          onGenerateRoute: AppRoute.generate,
+          initialRoute: initialRoute,
+          onGenerateRoute: AppRouter.generate,
         ),
       ),
     );

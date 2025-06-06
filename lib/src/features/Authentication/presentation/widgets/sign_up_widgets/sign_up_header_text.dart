@@ -13,7 +13,7 @@ class SignUpHeaderText extends StatelessWidget {
       children: [
         Text('Sign up with Email',
             style: AppTextStyles.poppinsFont18DarkBlue100Bold1),
-        verticalSpace(20.h),
+        verticalSpace(20),
         Align(
           alignment: Alignment.center,
           child: SizedBox(

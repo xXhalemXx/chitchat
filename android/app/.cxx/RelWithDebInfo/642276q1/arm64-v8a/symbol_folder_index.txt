@@ -1,0 +1,1 @@
+E:\flutter_projects\chitchat\chitchat\build\app\intermediates\cxx\RelWithDebInfo\642276q1\obj\arm64-v8a

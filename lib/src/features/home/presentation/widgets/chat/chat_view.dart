@@ -1,8 +1,9 @@
 import 'package:chitchat/src/core/config/config.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
+import 'package:chitchat/src/core/models/user_data.dart';
 import 'package:chitchat/src/features/home/data/models/message_model.dart';
 import 'package:chitchat/src/core/networking/models/user_model.dart';
-import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/chat_cubit/chat_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,61 +16,39 @@ class ChatView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (BuildContext context) {
-      return BlocBuilder<HomeCubit, HomeState>(
-        buildWhen: (previous, current) => current is HomeGetChatMassages,
+      return BlocBuilder<ChatCubit, ChatState>(
         builder: (context, state) {
-          if (state is HomeGetChatMassages) {
-            return Flexible(
-              child: ListView.builder(
-                itemCount: state.allMessages.length,
-                controller: getIt<HomeCubit>().scrollController,
-                itemBuilder: (context, index) {
-                  MessageModel currentMessage = state.allMessages[index];
-                  if (currentMessage.sender ==
-                      getIt<HomeCubit>().currentUser.uId) {
-                    return sendedMessage(
-                      message: currentMessage.text,
-                      isLastMessage: index < state.allMessages.length - 1
-                          ? getIt<HomeCubit>().formatDateTime(
-                                  state.allMessages[index + 1].dateTime) !=
-                              getIt<HomeCubit>()
-                                  .formatDateTime(currentMessage.dateTime)
-                          : true,
-                      time: getIt<HomeCubit>()
-                          .formatDateTime(currentMessage.dateTime),
-                    );
-                  } else {
-                    return receivedMessage(
-                      message: currentMessage.text,
-                      isLastMessage: index < state.allMessages.length - 1
-                          ? getIt<HomeCubit>().formatDateTime(
-                                  state.allMessages[index + 1].dateTime) !=
-                              getIt<HomeCubit>()
-                                  .formatDateTime(currentMessage.dateTime)
-                          : true,
-                      time: getIt<HomeCubit>()
-                          .formatDateTime(currentMessage.dateTime),
-                    );
-                  }
-                },
-              ),
-            );
-          } else {
-            return const Flexible(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
+          return Flexible(
+            child: ListView.builder(
+              itemCount: state.allMessages.length,
+              controller: getIt<ChatCubit>().scrollController,
+              itemBuilder: (context, index) {
+                MessageModel currentMessage = state.allMessages[index];
+                if (currentMessage.sender == UserData.currentUser?.uId) {
+                  return sendedMessage(
+                    message: currentMessage,
+                    isLastMessage: getIt<ChatCubit>()
+                        .isLastMessage(index, state.allMessages),
+                  );
+                } else {
+                  return receivedMessage(
+                    message: currentMessage,
+                    isLastMessage: getIt<ChatCubit>()
+                        .isLastMessage(index, state.allMessages),
+                  );
+                }
+              },
+            ),
+          );
         },
       );
     });
   }
 
-  Widget sendedMessage(
-      {required String message,
-      bool isLastMessage = false,
-      required String time}) {
+  Widget sendedMessage({
+    required MessageModel message,
+    bool isLastMessage = false,
+  }) {
     return Align(
       alignment: Alignment.centerRight,
       child: Column(
@@ -91,7 +70,7 @@ class ChatView extends StatelessWidget {
               ),
             ),
             child: Text(
-              message,
+              message.text,
               style: AppTextStyles.poppinsFont12White100Regular1,
               textAlign: TextAlign.right,
             ),
@@ -99,7 +78,8 @@ class ChatView extends StatelessWidget {
           isLastMessage
               ? Padding(
                   padding: EdgeInsets.only(right: 8.0.w, top: 2.h, bottom: 4.h),
-                  child: Text(time,
+                  child: Text(
+                      getIt<ChatCubit>().formatDateTime(message.dateTime),
                       style: AppTextStyles.poppinsFont10Gray50Black1),
                 )
               : const SizedBox.shrink(),
@@ -108,10 +88,10 @@ class ChatView extends StatelessWidget {
     );
   }
 
-  Widget receivedMessage(
-      {required String message,
-      bool isLastMessage = false,
-      required String time}) {
+  Widget receivedMessage({
+    bool isLastMessage = false,
+    required MessageModel message,
+  }) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Column(
@@ -133,7 +113,7 @@ class ChatView extends StatelessWidget {
               ),
             ),
             child: Text(
-              message,
+              message.text,
               style: AppTextStyles.poppinsFont12Black100Regular1,
               textAlign: TextAlign.left,
             ),
@@ -141,7 +121,8 @@ class ChatView extends StatelessWidget {
           isLastMessage
               ? Padding(
                   padding: EdgeInsets.only(left: 8.0.w, top: 2.h, bottom: 4.h),
-                  child: Text(time,
+                  child: Text(
+                      getIt<ChatCubit>().formatDateTime(message.dateTime),
                       style: AppTextStyles.poppinsFont10Gray50Black1),
                 )
               : const SizedBox.shrink(),

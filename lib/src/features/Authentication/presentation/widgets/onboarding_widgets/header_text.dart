@@ -8,15 +8,18 @@ class HeaderText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('Connect friends easily & quickly',
-            style: AppTextStyles.poppinsFont68White100Regular1_14),
-        verticalSpace(54.h),
-        Text(
-            'Our chat app is the perfect way to stay connected with friends and family.',
-            style: AppTextStyles.poppinsFont16White50Regular1_6),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(left: 26.0.w),
+      child: Column(
+        children: [
+          Text('Connect friends easily & quickly',
+              style: AppTextStyles.poppinsFont68White100Regular1_14),
+          verticalSpace(40),
+          Text(
+              'Our chat app is the perfect way to stay connected with friends and family.',
+              style: AppTextStyles.poppinsFont16White50Regular1_6),
+        ],
+      ),
     );
   }
 }

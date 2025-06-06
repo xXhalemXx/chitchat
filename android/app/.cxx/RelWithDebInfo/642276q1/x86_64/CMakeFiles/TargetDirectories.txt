@@ -1,0 +1,2 @@
+E:/flutter_projects/chitchat/chitchat/android/app/.cxx/RelWithDebInfo/642276q1/x86_64/CMakeFiles/edit_cache.dir
+E:/flutter_projects/chitchat/chitchat/android/app/.cxx/RelWithDebInfo/642276q1/x86_64/CMakeFiles/rebuild_cache.dir

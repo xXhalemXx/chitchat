@@ -1,5 +1,2 @@
-
-    library config;
-    export 'injection.dart';
-    export 'keyboard.dart';
-    
+export 'injection.dart';
+export 'keyboard.dart';

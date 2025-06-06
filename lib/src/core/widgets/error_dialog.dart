@@ -15,7 +15,11 @@ class ErrorDialog extends StatelessWidget {
         'Error',
         style: AppTextStyles.poppinsFont18Red100Bold1,
       ),
-      content: Text(errorMessage),
+      content: Text(
+        errorMessage,
+        style: AppTextStyles.poppinsFont16Black100Medium1,
+        textAlign: TextAlign.center,
+      ),
       actions: [
         AppTextButton(
             buttonText: 'ok',

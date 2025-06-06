@@ -57,10 +57,10 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
             fillColor: widget.backgroundColor ?? AppColor.white,
             filled: true,
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: AppColor.lightGray, width: 1.0),
+              borderSide: BorderSide(color: AppColor.lighterGray, width: 1.0),
             ),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: AppColor.lightGray, width: 1.0),
+              borderSide: BorderSide(color: AppColor.lighterGray, width: 1.0),
             ),
             errorBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: AppColor.red, width: 2.0),

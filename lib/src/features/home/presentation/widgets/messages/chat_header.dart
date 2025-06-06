@@ -1,9 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/core/helpers/spacing.dart';
 import 'package:chitchat/src/features/home/data/models/user_with_last_message_model.dart';
-import 'package:chitchat/src/features/home/presentation/cubit/cubit/home_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/cubit/messages_cubit/messages_cubit.dart';
+import 'package:chitchat/src/features/home/presentation/widgets/general_widgets/user_circle_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -15,17 +16,20 @@ class ChatHeaders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // log('last activity: ${users[0].user.lastActivity}');
     return users.isEmpty
         ? _noChatsYet()
         : ListView.builder(
+            padding: EdgeInsets.zero,
             itemCount: users.length,
             itemBuilder: (context, index) {
               return _chatEntity(
-                  userWithLastMessage: users[index],
-                  onTap: () {
-                    getIt<HomeCubit>().navigateToChatScreen(
-                        receiver: users[index].user, context: context);
-                  });
+                userWithLastMessage: users[index],
+                onTap: () {
+                  getIt<MessagesCubit>().navigateToChatScreen(
+                      receiver: users[index].user, context: context);
+                },
+              );
             },
           );
   }
@@ -64,14 +68,17 @@ class ChatHeaders extends StatelessWidget {
             endActionPane: _endActionPane(),
             child: Row(
               children: [
-                _avatarImage(userPhoto: userWithLastMessage.user.photo),
-                horizontalSpace(12.w),
+                _avatarImage(
+                    userPhoto: userWithLastMessage.user.photo,
+                    lastActivity: userWithLastMessage.user.lastActivity),
+                horizontalSpace(12),
                 _avatarNameAndLastMessage(
                     name: userWithLastMessage.user.name,
                     lastMessage: userWithLastMessage.lastMessage),
-                const Spacer(),
+                // const Spacer(),
                 _timeAndUnreadMessage(
-                    unreadMessages: userWithLastMessage.unreadCount),
+                    unreadMessages: userWithLastMessage.unreadCount,
+                    dateAndTime: userWithLastMessage.user.lastActivity),
               ],
             ),
           ),
@@ -80,28 +87,25 @@ class ChatHeaders extends StatelessWidget {
     );
   }
 
-  Widget _avatarImage({required String userPhoto}) {
+  Widget _avatarImage(
+      {required String userPhoto, required String lastActivity}) {
     return Stack(
       children: [
-        Container(
-          width: 52.w,
-          height: 52.h,
-          decoration: const BoxDecoration(shape: BoxShape.circle),
-          child: CircleAvatar(
-            backgroundImage: userPhoto == ''
-                ? const AssetImage('assets/images/noProfilePic.png')
-                : CachedNetworkImageProvider(userPhoto) as ImageProvider,
-          ),
+        UserCircleAvatar(
+          userPhoto: userPhoto,
+          size: 52,
         ),
         Positioned(
-          bottom: 3.h,
-          right: 3.w,
+          bottom: 2.h,
+          right: 4.w,
           child: Container(
-            width: 8.w,
-            height: 8.h,
+            width: 10.w,
+            height: 10.h,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColor.green,
+              color: getIt<MessagesCubit>().isActiveNow(lastActivity)
+                  ? AppColor.green
+                  : AppColor.lightGray,
             ),
           ),
         ),
@@ -111,33 +115,38 @@ class ChatHeaders extends StatelessWidget {
 
   Widget _avatarNameAndLastMessage(
       {required String name, required String lastMessage}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          name,
-          style: AppTextStyles.poppinsFont20Black100Medium1,
-        ),
-        verticalSpace(6.h),
-        Text(
-          lastMessage,
-          style: AppTextStyles.poppinsFont12Gray50Regular1,
-        )
-      ],
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            name,
+            style: AppTextStyles.poppinsFont20Black100Medium1,
+            overflow: TextOverflow.clip,
+          ),
+          verticalSpace(6),
+          Text(
+            lastMessage,
+            style: AppTextStyles.poppinsFont12Gray50Regular1,
+            overflow: TextOverflow.ellipsis,
+          )
+        ],
+      ),
     );
   }
 
-  Widget _timeAndUnreadMessage({required int unreadMessages}) {
+  Widget _timeAndUnreadMessage(
+      {required int unreadMessages, required String dateAndTime}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        // Text(
-        //   '2 min ago',
-        //   style: AppTextStyles.poppinsFont12Gray50Light1,
-        // ),
-        // verticalSpace(9.h),
+        Text(
+          getIt<MessagesCubit>().getTimeDifference(dateAndTime: dateAndTime),
+          style: AppTextStyles.poppinsFont12Gray50Light1,
+        ),
+        verticalSpace(9),
         unreadMessages == 0
             ? const SizedBox.shrink()
             : Container(
@@ -163,19 +172,19 @@ class ChatHeaders extends StatelessWidget {
       extentRatio: 0.35,
       motion: const ScrollMotion(),
       children: [
-        horizontalSpace(16.w),
+        horizontalSpace(16),
         _actionPaneButton(
             onTap: () {
-              print('tap bill');
+              // print('tap bill');
             },
-            svgName: 'assets/images/svgs/bill.svg',
+            svgName: Assets.assetsImagesSvgsBill,
             backgroundColor: AppColor.black),
-        horizontalSpace(16.w),
+        horizontalSpace(16),
         _actionPaneButton(
             onTap: () {
-              print('tap delete');
+              // print('tap delete');
             },
-            svgName: 'assets/images/svgs/trash.svg',
+            svgName: Assets.assetsImagesSvgsTrash,
             backgroundColor: AppColor.red),
       ],
     );

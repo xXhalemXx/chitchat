@@ -1,4 +1,5 @@
 import 'package:chitchat/src/core/config/config.dart';
+import 'package:chitchat/src/core/constants/assets.dart';
 import 'package:chitchat/src/core/constants/constants.dart';
 import 'package:chitchat/src/features/Authentication/presentation/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
@@ -13,34 +14,28 @@ class SocialMediaButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: leftPadding ?? 0.w),
-      child: SizedBox(
-        height: 48.h,
-        width: 185.w,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            socialElement(
-                svgName: 'assets/images/svgs/facebook.svg',
-                onTap: () {
-                  comingSoonSnakeBar(context, 'facebook');
-                }),
-            socialElement(
-                svgName: 'assets/images/svgs/google.svg',
-                onTap: () {
-                  getIt<AuthCubit>().signInWithGoogle(context: context);
-                }),
-            socialElement(
-                svgName: backgroundColor == AppColor.white
-                    ? 'assets/images/svgs/apple_black.svg'
-                    : 'assets/images/svgs/apple.svg',
-                onTap: () {
-                  comingSoonSnakeBar(context, 'apple');
-                }),
-          ],
-        ),
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 35.w,
+      children: [
+        socialElement(
+            svgName: Assets.assetsImagesSvgsFacebook,
+            onTap: () {
+              comingSoonSnakeBar(context, 'facebook');
+            }),
+        socialElement(
+            svgName: Assets.assetsImagesSvgsGoogle,
+            onTap: () {
+              getIt<AuthCubit>().signInWithGoogle();
+            }),
+        socialElement(
+            svgName: backgroundColor == AppColor.white
+                ? Assets.assetsImagesSvgsAppleBlack
+                : Assets.assetsImagesSvgsApple,
+            onTap: () {
+              comingSoonSnakeBar(context, 'apple');
+            }),
+      ],
     );
   }
 
