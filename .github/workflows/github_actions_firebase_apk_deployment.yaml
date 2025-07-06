@@ -1,0 +1,50 @@
+name: Build & Distribute to Firebase
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  build-and-distribute-apk-to-firebase:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0' 
+
+      # Install dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Build release APK
+      - name: Build APK
+        run: flutter build apk --release
+
+      # Setup Firebase CLI
+      - name: Set up Firebase CLI
+        run: |
+          curl -sL https://firebase.tools | bash
+          firebase --version
+
+      # Save service account JSON
+      - name: Create Firebase Service Account File
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > firebase-service-account.json
+        shell: bash
+
+      # Distribute to Firebase
+      - name: Upload to Firebase App Distribution
+        run: |
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+            --app ${{ secrets.FIREBASE_APP_ID }} \
+            --service-account-file firebase-service-account.json \
+            --testers: "mohamedhalim2991@gmail.com"\
+            --release_notes: "testing github actions"

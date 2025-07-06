@@ -11,7 +11,7 @@ ThemeData lightTheme = ThemeData(
         statusBarIconBrightness: Brightness.light,
         statusBarColor: Colors.transparent),
   ),
-  dialogTheme: DialogTheme(
-    backgroundColor: AppColor.white,
-  ),
+  // dialogTheme: DialogTheme(
+  //   backgroundColor: AppColor.white,
+  // ),
 );

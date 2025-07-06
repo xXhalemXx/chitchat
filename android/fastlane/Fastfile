@@ -1,0 +1,19 @@
+
+default_platform(:android)
+
+platform :android do
+  desc "Build the Android app for firebase distribution"
+  lane :firebase_dis do
+  sh "flutter clean"
+  sh "flutter pub get"
+  sh "flutter build apk --release"
+  firebase_app_distribution(
+            app: "1:931632832155:android:9bc14043da9abaaa71f03e",
+            testers: "mohamedhalim2991@gmail.com",
+            android_artifact_type: "APK",
+            android_artifact_path: "../build/app/outputs/flutter-apk/app-release.apk",
+            release_notes: "Lots of amazing new features to test out!"
+        )
+  end
+
+end
