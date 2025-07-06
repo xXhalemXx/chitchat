@@ -11,15 +11,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools@latest
-
+        
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -30,6 +22,14 @@ jobs:
 
       - name: Build APK
         run: flutter build apk --release
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools@latest
 
       - name: Distribute to Firebase
         run: |
