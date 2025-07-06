@@ -46,5 +46,5 @@ jobs:
           firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
             --app ${{ secrets.FIREBASE_APP_ID }} \
             --service-account-file firebase-service-account.json \
-            --testers: "mohamedhalim2991@gmail.com"\
-            --release_notes: "testing github actions"
+            --testers "mohamedhalim2991@gmail.com" \
+            --release-notes "Testing GitHub Actions deployment"
