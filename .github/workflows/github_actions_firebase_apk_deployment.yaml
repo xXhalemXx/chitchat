@@ -28,23 +28,22 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
-      # Setup Firebase CLI
-      - name: Set up Firebase CLI
-        run: |
-          curl -sL https://firebase.tools | bash
-          firebase --version
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-      # Save service account JSON
+      - name: Install latest Firebase CLI
+        run: npm install -g firebase-tools@latest
+
       - name: Create Firebase Service Account File
         run: |
           echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > firebase-service-account.json
-        shell: bash
 
-      # Distribute to Firebase
       - name: Upload to Firebase App Distribution
         run: |
           firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
             --app ${{ secrets.FIREBASE_APP_ID }} \
             --service-account-file firebase-service-account.json \
             --testers "mohamedhalim2991@gmail.com" \
-            --release-notes "Testing GitHub Actions deployment 2"
+            --release-notes "Testing GitHub Actions deployment"
