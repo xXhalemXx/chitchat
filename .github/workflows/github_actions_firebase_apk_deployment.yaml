@@ -47,4 +47,4 @@ jobs:
             --app ${{ secrets.FIREBASE_APP_ID }} \
             --service-account-file firebase-service-account.json \
             --testers "mohamedhalim2991@gmail.com" \
-            --release-notes "Testing GitHub Actions deployment"
+            --release-notes "Testing GitHub Actions deployment 2"
