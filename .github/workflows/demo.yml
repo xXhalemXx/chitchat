@@ -43,23 +43,37 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools@latest
 
-      # Create service account file
-      - name: Create service account file
-        run: |
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > firebase-service-account.json
-          echo "Service account email:"
-          cat firebase-service-account.json | jq -r .client_email
+      # 👇 Install jq for JSON validation
+      - name: Install jq
+        run: sudo apt-get install -y jq
 
-      # 👇 CORRECT AUTHENTICATION METHOD
+      # 👇 Properly create and validate service account file
+      - name: Create and validate service account file
+        run: |
+          # Create JSON file using heredoc
+          cat <<EOF > firebase-service-account.json
+          ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          EOF
+          
+          # Validate JSON syntax
+          echo "=== JSON Validation ==="
+          jq . firebase-service-account.json
+          
+          echo "=== Service Account Email ==="
+          jq -r .client_email firebase-service-account.json
+
+      # Install Google Cloud SDK
+      - name: Install Google Cloud SDK
+        run: |
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+          sudo apt-get update && sudo apt-get install -y google-cloud-cli
+
+      # Authenticate
       - name: Authenticate with Service Account
         run: |
-          # Activate service account using gcloud
           gcloud auth activate-service-account --key-file=firebase-service-account.json
-          
-          # Set project ID explicitly
-          gcloud config set project YOUR_PROJECT_ID
-          
-          # Verify authentication
+          gcloud config set project chitchat-17a50  # 👈 Replace with your project ID
           gcloud auth list
 
       # Distribute to Firebase
