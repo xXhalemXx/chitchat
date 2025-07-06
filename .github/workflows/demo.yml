@@ -50,16 +50,17 @@ jobs:
           echo "Service account email:"
           cat firebase-service-account.json | jq -r .client_email
 
-      # Initialize Firebase with service account
-      - name: Authenticate Firebase
+      # 👇 CORRECT AUTHENTICATION METHOD
+      - name: Authenticate with Service Account
         run: |
-          # Set Google credentials
-          export GOOGLE_APPLICATION_CREDENTIALS=firebase-service-account.json
+          # Activate service account using gcloud
+          gcloud auth activate-service-account --key-file=firebase-service-account.json
           
-          # Login using service account
-          firebase login --cred-file firebase-service-account.json
+          # Set project ID explicitly
+          gcloud config set project YOUR_PROJECT_ID
           
-          echo "✅ Firebase authenticated"
+          # Verify authentication
+          gcloud auth list
 
       # Distribute to Firebase
       - name: Distribute to Firebase
