@@ -1,0 +1,59 @@
+name: Build & Distribute to Firebase
+
+on:
+  push:
+    branches: 
+      - main
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: 'Skip APK build (test only)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build-and-distribute:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 👇 Add Node.js setup with v20
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install latest Firebase CLI
+        run: npm install -g firebase-tools@latest
+
+      # 👇 Add conditional build skip
+      - name: Build APK (Skip if test_mode)
+        if: ${{ !inputs.test_mode }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.0'
+          args: build apk --release
+
+      # 👇 Add dummy APK for testing
+      - name: Create dummy APK for testing
+        if: ${{ inputs.test_mode }}
+        run: |
+          mkdir -p build/app/outputs/flutter-apk/
+          touch build/app/outputs/flutter-apk/app-release.apk
+          echo "Dummy APK created" > build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Create Firebase Service Account File
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > firebase-service-account.json
+
+      - name: Upload to Firebase App Distribution
+        run: |
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+            --app ${{ secrets.FIREBASE_APP_ID }} \
+            --service-account-file firebase-service-account.json \
+            --testers "mohamedhalim2991@gmail.com" \
+            --release-notes "Test Run ${{ github.run_id }}"
