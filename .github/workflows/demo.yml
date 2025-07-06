@@ -49,21 +49,14 @@ jobs:
           echo "Service account email:"
           cat firebase-service-account.json | jq -r .client_email
 
-      - name: Fix service account key format
-        run: |
-          sudo apt-get install -y jq
-          jq '.private_key |= gsub("BEGINPRIVATEKEY"; "BEGIN PRIVATE KEY") | 
-               .private_key |= gsub("ENDPRIVATEKEY"; "END PRIVATE KEY") |
-               .private_key |= gsub("\\\\n"; "\n")' \
-              firebase-service-account.json > fixed.json
-          mv fixed.json firebase-service-account.json
-
-      # Install Google Cloud SDK
-      # - name: Install Google Cloud SDK
+      # - name: Fix service account key format
       #   run: |
-      #     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-      #     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-      #     sudo apt-get update && sudo apt-get install -y google-cloud-cli
+      #     sudo apt-get install -y jq
+      #     jq '.private_key |= gsub("BEGINPRIVATEKEY"; "BEGIN PRIVATE KEY") | 
+      #          .private_key |= gsub("ENDPRIVATEKEY"; "END PRIVATE KEY") |
+      #          .private_key |= gsub("\\\\n"; "\n")' \
+      #         firebase-service-account.json > fixed.json
+      #     mv fixed.json firebase-service-account.json
 
       - name: Authenticate with Service Account
         run: |
@@ -74,7 +67,7 @@ jobs:
       # 👇 Choose ONE of these distribution methods 👇
       
       # METHOD 1: Environment variable authentication
-      - name: Distribute to Firebase (Method 1)
+      - name: Distribute to Firebase 
         env:
           GOOGLE_APPLICATION_CREDENTIALS: firebase-service-account.json
         run: |
