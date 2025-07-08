@@ -12,22 +12,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # - name: Setup Flutter
-      #   uses: subosito/flutter-action@v2
-      #   with:
-      #     flutter-version: '3.32.0'
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
 
-      # - name: Install dependencies
-      #   run: flutter pub get
+      - name: Install dependencies
+        run: flutter pub get
 
-      # - name: Build APK
-      #   run: flutter build apk --release
+      - name: Build APK
+        run: flutter build apk --release
 
-       # Create dummy APK for testing
-      - name: Create dummy APK
-        run: |
-          mkdir -p build/app/outputs/flutter-apk/
-          echo "Dummy APK for testing" > build/app/outputs/flutter-apk/app-release.apk
+      # Create dummy APK for testing
+      # - name: Create dummy APK
+      #   run: |
+      #     mkdir -p build/app/outputs/flutter-apk/
+      #     echo "Dummy APK for testing" > build/app/outputs/flutter-apk/app-release.apk
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools@latest
